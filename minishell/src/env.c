@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 18:19:17 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/02 19:20:53 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/02 19:34:08 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,8 @@ t_env	*env_content(t_env *env, char **envp)
 	j = 0;
 	while (envp[i])
 	{
-        // printf("env: %s\n", envp[i]);
 		j = 0;
 		table = ft_split(envp[i], '=');
-        // printf("table0 : %s\n", table[0]);
-        // printf("table1 : %s\n", table[1]);
 		env = lstadd_back_env(env, table);
 		while (table[j])
 		{
@@ -78,6 +75,6 @@ t_env	*env_content(t_env *env, char **envp)
 		free(table);
 		i++;
 	}
-    lstfirst_env(env);
+	env = lstfirst_env(env);
 	return (env);
 }

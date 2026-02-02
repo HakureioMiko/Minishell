@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/02 19:05:40 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/02 19:34:40 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	handler(int signum)
 // signal(SIGQUIT, SIG_IGN);
 // signal(SIGINT, handler);
 
-
 int	main(int ac, char **av, char **envp)
 {
 	t_env	*env;
@@ -35,9 +34,12 @@ int	main(int ac, char **av, char **envp)
 	(void)ac;
 	env = NULL;
 	env = env_content(env, envp);
-		printf("key : %s\n", env->key);
-		printf("value : %s", env->content);
+	while (env->next != NULL)
+	{
+		printf("%s", env->key);
+		printf("%s\n", env->content);
 		env = env->next;
+	}
 }
 
 // Test KILL
