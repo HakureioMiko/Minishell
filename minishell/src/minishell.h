@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/02 15:44:30 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/02 16:12:37 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # define WHITE "\033[37m"
 # define RESET "\033[0m"
 
+# include "../libft/libft.h"
 # include <readline/history.h>
 # include <readline/readline.h>
 // readline rl_clear_history, rl_on_new_line,
@@ -51,8 +52,8 @@
 # include <sys/stat.h>
 // stat() lstat() fstat()
 
-# include <stdbool.h>
 # include <fcntl.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 // getenv()
@@ -62,15 +63,15 @@
 
 typedef struct s_mini
 {
-	int     command;
-	int     infile;
-	int     outfile;
-	int     pipe; 
-	char    *var;
-	struct s_mini  *next;
-	struct s_mini  *prev;
-}       t_mini;
+	int				command;
+	int				infile;
+	int				outfile;
+	int				pipe;
+	char			*var;
+	struct s_mini	*next;
+	struct s_mini	*previous;
+}					t_mini;
 
-void	lexing(t_mini **mini_vars, char *line);
+void				lexing(t_mini *mini_vars, char *line);
 
 #endif

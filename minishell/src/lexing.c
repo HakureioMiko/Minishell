@@ -3,65 +3,91 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 15:09:27 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/02 15:48:26 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/02 16:24:01 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_mini	*ft_addnode(char *line)
+t_mini	*lstfirst(t_mini *lst)
 {
-	t_mini	*add_node;
+	t_mini	*cursor;
+
+	cursor = lst;
+	while (cursor != NULL)
+	{
+		if (cursor->previous == NULL)
+			return (cursor);
+		cursor = cursor->previous;
+	}
+	return (cursor);
+}
+
+t_mini	*lstadd_back(t_mini *lst, char *line)
+{
+	t_mini	*last;
+	t_mini	*curseur;
+
+	last = malloc(sizeof(t_mini));
+	if (!last)
+		return (NULL);
+	last->var = line;
+	last->next = NULL;
+	if (lst == NULL)
+	{
+		last->previous = NULL;
+		return (last);
+	}
+	curseur = lst;
+	while (curseur->next != NULL)
+		curseur = curseur->next;
+	curseur->next = last;
+	last->previous = curseur;
+	return (last);
+}
+
+void	printmini(t_mini *mini)
+{
+	mini = lstfirst(mini);
+	if (!mini)
+	{
+		printf("error\n");
+		return ;
+	}
+	while (mini->next != NULL)
+	{
+		printf("value string : [%s]\n", mini->var);
+		mini = mini->next;
+	}
+	printf("valeur de fin : debut [%s]\n", mini->var);
+	// ta = ta->previous;
+	// while (ta->previous != NULL)
+	// {
+	// 	printf("rvalue ta : [%d]\n", ta->content);
+	// 	printf("rank : [%d]\n", ta->rank);
+	// 	ta = ta->previous;
+	// }
+	// printf("rvalue ta : [%d]\n", ta->content);
+	// printf("rank : [%d]\n", ta->rank);
+}
+
+void	lexing(t_mini *mini_vars, char *line)
+{
+	char	**table;
 	int		i;
 
 	i = 0;
-	add_node = malloc(sizeof(t_mini));
-	if (!add_node)
-		return (NULL);
-	add_node->var = malloc(sizeof(char *) * 4);
-	while (line[i])
+	table = ft_split(line, ' ');
+	if (!table)
+		return ;
+	while (table[i])
 	{
-		if (line[i] != ' ')
-		{
-			add_node->var[i] = line[i];
-		}
+		mini_vars = lstadd_back(mini_vars, table[i]);
 		i++;
 	}
-	add_node->var[2] = '\0';
-	while (line[i])
-	{
-		if (line[i] == ' ')
-		i ++;
-	}
-	line = line + i;
-	return (add_node);
-}
-
-void	ft_add_back(t_mini **stack_a, t_mini *new)
-{
-	t_mini	*last;
-
-	if (!stack_a || !new)
-		return ;
-	if (!*stack_a)
-	{
-		*stack_a = new;
-		return ;
-	}
-	last = (*stack_a)->prev;
-	last->next = new;
-	new->prev = last;
-	new->next = *stack_a;
-	(*stack_a)->prev = new;
-}
-
-void	lexing(t_mini **mini_vars, char *line)
-{
-	t_mini *new;
-
-	new = ft_addnode(line);
-	ft_add_back(mini_vars, new);
+	mini_vars = lstfirst(mini_vars);
+	printmini(mini_vars);
 }
