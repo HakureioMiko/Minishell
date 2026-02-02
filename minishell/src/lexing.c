@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 15:09:27 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/02 16:24:01 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/02 16:39:40 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	printmini(t_mini *mini)
 	// printf("rank : [%d]\n", ta->rank);
 }
 
-void	lexing(t_mini *mini_vars, char *line)
+t_mini	*lexing(t_mini *mini_vars, char *line)
 {
 	char	**table;
 	int		i;
@@ -82,12 +82,11 @@ void	lexing(t_mini *mini_vars, char *line)
 	i = 0;
 	table = ft_split(line, ' ');
 	if (!table)
-		return ;
+		return (mini_vars);
 	while (table[i])
 	{
 		mini_vars = lstadd_back(mini_vars, table[i]);
 		i++;
 	}
-	mini_vars = lstfirst(mini_vars);
-	printmini(mini_vars);
+	return (mini_vars);
 }

@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/02 16:15:43 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/02 16:39:35 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,9 @@ int	main(void)
 
 		line = readline("Minishell > ");
 		if (line)
-			lexing(mini_vars, line);
+			mini_vars = lexing(mini_vars, line);
+		mini_vars = lstfirst(mini_vars);
+		printmini(mini_vars);
 		free(line);
 	}
 }
