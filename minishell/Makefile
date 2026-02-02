@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+         #
+#    By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/02/02 15:43:55 by ibrouin-         ###   ########.fr        #
+#    Updated: 2026/02/02 18:29:09 by mickzhan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,8 @@ CFLAGS = -Wall -Wextra -Werror -I./includes -I./libft
 SRC_DIR = src/
 SRC =	main.c \
 		lexing.c \
+		env.c \
+		
 
 OBJ_DIR = obj/
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))

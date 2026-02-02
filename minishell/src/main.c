@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/02 18:17:55 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/02 19:05:40 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,42 +24,20 @@ void	handler(int signum)
 // signal(SIGQUIT, SIG_IGN);
 // signal(SIGINT, handler);
 
-t_env	*key_env(t_env *env, char *str)
-{
-	char	**split;
-	int		i;
-
-	i = 0;
-	split = ft_split(str, ':');
-	env = malloc(sizeof(t_env));
-	return (env);
-}
 
 int	main(int ac, char **av, char **envp)
 {
-	char	*line;
-	t_mini	*mini_vars;
 	t_env	*env;
 	int		i;
 
 	i = 0;
 	(void)av;
-	while (envp[i])
-	{
-		i++;
-	}
-	mini_vars = NULL;
-	while (true)
-	{
-		line = readline("Minishell > ");
-		if (line)
-		{
-			mini_vars = lexing(mini_vars, line);
-			mini_vars = lstfirst(mini_vars);
-		}
-		free(line);
-	}
-	return (0);
+	(void)ac;
+	env = NULL;
+	env = env_content(env, envp);
+		printf("key : %s\n", env->key);
+		printf("value : %s", env->content);
+		env = env->next;
 }
 
 // Test KILL
