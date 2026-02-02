@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/02 16:39:35 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/02 18:21:15 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,12 @@ void	handler(int signum)
 int	main(void)
 {
 	char	*line;
-	t_mini	*mini_vars;
+	t_token	*mini_vars;
 
 	mini_vars = NULL;
 	signal(SIGINT, handler);
 	while (true)
 	{
-
 		line = readline("Minishell > ");
 		if (line)
 			mini_vars = lexing(mini_vars, line);
