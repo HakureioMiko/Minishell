@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 15:09:27 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/03 11:54:42 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/03 14:05:57 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ char	*add_char(char *buffer, char new)
 
 void	normal_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
 {
-	if (cara >= 'a' && cara <= 'z')
+	if ((cara >= 'a' && cara <= 'z') || (cara >= 'A' && cara <= 'Z'))
 			*buffer = add_char(*buffer, cara);
 	if ((cara == ' ') || (cara >= 7 && cara <= 13))
 	{
