@@ -6,11 +6,47 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 18:19:17 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/02 19:34:08 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/03 13:45:57 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*strcat_env(char *s1, char *s2, int size)
+{
+	int		i;
+	int		j;
+	char	*str;
+
+	i = 0;
+	j = 0;
+	str = malloc(sizeof(char) * size + 1);
+	if (!str)
+		return (NULL);
+	while (s1[i])
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	while (s2[j])
+	{
+		str[i + j] = s2[j];
+		j++;
+	}
+	str[i + j] = '\0';
+	return (str);
+}
+
+char	*envjoin(char *s1, char *s2)
+{
+	int		len;
+	char	*string;
+
+	len = ft_strlen(s1) + ft_strlen(s2);
+	string = strcat_env(s1, s2, len);
+	free(s1);
+	return (string);
+}
 
 t_env	*lstfirst_env(t_env *lst)
 {
@@ -26,20 +62,16 @@ t_env	*lstfirst_env(t_env *lst)
 	return (cursor);
 }
 
-t_env	*lstadd_back_env(t_env *lst, char **line)
+t_env	*lstadd_back_env(t_env *lst, char *key, char *value)
 {
 	t_env	*last;
 	t_env	*curseur;
-	char	*line0;
-	char	*line1;
 
 	last = malloc(sizeof(t_env));
-	line0 = ft_strdup(line[0]);
-	line1 = ft_strdup(line[1]);
 	if (!last)
 		return (NULL);
-	last->key = line0;
-	last->content = line1;
+	last->key = key;
+	last->content = value;
 	last->next = NULL;
 	if (lst == NULL)
 	{
@@ -54,9 +86,40 @@ t_env	*lstadd_back_env(t_env *lst, char **line)
 	return (last);
 }
 
+int	find_letter(char *envp, char letter)
+{
+	int	i;
+
+	i = 0;
+	if (!envp || !letter)
+		return (0);
+	while (envp[i] && envp[i] != letter)
+		i++;
+	return (i);
+}
+
+char	*get_key(char *envp)
+{
+	int		i;
+	int		j;
+	char	*str;
+
+	i = find_letter(envp, '=');
+	j = 0;
+	str = malloc(sizeof(char) * (i + 1));
+	while (j < i)
+	{
+		str[j] = envp[j];
+		j++;
+	}
+	str[j] = '\0';
+	return (str);
+}
+
 t_env	*env_content(t_env *env, char **envp)
 {
-	char	**table;
+	char	*key;
+	char	*value;
 	int		i;
 	int		j;
 
@@ -64,15 +127,9 @@ t_env	*env_content(t_env *env, char **envp)
 	j = 0;
 	while (envp[i])
 	{
-		j = 0;
-		table = ft_split(envp[i], '=');
-		env = lstadd_back_env(env, table);
-		while (table[j])
-		{
-			free(table[j]);
-			j++;
-		}
-		free(table);
+		key = get_key(envp[i]);
+		value = getenv(key);
+		env = lstadd_back_env(env, key, value);
 		i++;
 	}
 	env = lstfirst_env(env);
