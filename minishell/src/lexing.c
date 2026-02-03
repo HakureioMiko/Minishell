@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 15:09:27 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/03 11:54:42 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/03 14:53:18 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,19 @@ char	*add_char(char *buffer, char new)
 	int		len;
 	int		i;
 
+	if (!buffer)
+	{
+		buffer = malloc(1);
+		buffer[0]	
+	}
+		len = 0;
+	else
+		len = ft_strlen(buffer);
 	i = 0;
-	len = ft_strlen(buffer);
 	temp = malloc(sizeof(char *) * len + 2);
 	while(buffer[i] != '\0')
 	{
-		temp[i] = buffer[i];
+		temp[i] = buffer[i]; 
 		i++;
 	}
 	temp[i] = new;
@@ -98,8 +105,8 @@ void	normal_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
 		{
 			*mini_vars = lstadd_back(*mini_vars, *buffer, WORD);
 			free(*buffer);
-			*buffer = malloc(1);
-			*buffer[0] = '\0';
+			//*buffer = malloc(1);
+			//*buffer[0] = '\0';
 		}
 	}
 	if (cara == '|')
@@ -108,13 +115,13 @@ void	normal_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
 		{
 			*mini_vars = lstadd_back(*mini_vars, *buffer, WORD);
 			free(*buffer);
-			*buffer = malloc(1);
-			*buffer[0] = '\0';
+			//*buffer = malloc(1);
+			//*buffer[0] = '\0';
 		}
 		*mini_vars = lstadd_back(*mini_vars, "|", PIPE);
 		free(*buffer);
-		*buffer = malloc(1);
-		*buffer[0] = '\0';
+		//*buffer = malloc(1);
+		//*buffer[0] = '\0';
 	}
 	if (cara == '"')
 	{
@@ -141,15 +148,16 @@ t_token	*lexing(t_token *mini_vars, char *line)
 
 	i = 0;
 	state = NORMAL;
-	buffer = malloc(1);
-	buffer[0] = '\0';
+	buffer = NULL;
+	//buffer = malloc(1);
+	//buffer[0] = '\0';
 	while (line[i] != '\0')
 	{
 		if (state == NORMAL)
 		{
 			normal_state(&buffer, line[i], &state, &mini_vars);
 		}
-		if (state == IN_D_QUOTE)
+		else if (state == IN_D_QUOTE)
 		{
 			in_d_quote_state(&buffer, line[i], &state, &mini_vars);
 		}
