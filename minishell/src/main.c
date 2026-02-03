@@ -3,18 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/03 11:44:22 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/03 14:44:27 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "minishell.h"
 
 void	handler(int signum)
 {
-	(void) signum;
+	(void)signum;
 	printf("\n%sMinishell >%s", RED, RESET);
 }
 
@@ -22,15 +23,19 @@ void	handler(int signum)
 // SIGINT = CTRL + C
 // SIGTSTP = CTRL + Z
 // signal(SIGQUIT, SIG_IGN);
+// signal(SIGINT, handler);
 
-int	main(void)
+int	main(int ac, char **av, char **envp)
 {
 	char	*line;
 	t_token	*mini_vars;
+	t_env	*env;
 
-	mini_vars = NULL;
-	signal(SIGINT, handler);
-	while (true)
+	(void)av;
+	(void)ac;
+	env = NULL;
+	env = env_content(env, envp);
+	while (env->next != NULL)
 	{
 		line = readline("Minishell > ");
 		if (line)
