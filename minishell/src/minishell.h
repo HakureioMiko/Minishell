@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/04 11:54:43 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/04 13:58:48 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ void				ft_miniclear(t_token **lst);
 t_env				*env_content(t_env *env, char **envp);
 char				*get_key(char *envp);
 int					find_letter(char *envp, char letter);
-int					function_export(t_env *env, char *test);
+t_env				*function_export(t_env *env, char *test);
+t_env				*lstfirst_env(t_env *lst);
 
 #endif

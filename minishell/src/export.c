@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 15:20:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/04 11:54:30 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/04 14:20:34 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ t_env	*lstadd_back_exp(t_env *lst, char *key, char *value)
 	t_env	*last;
 	t_env	*curseur;
 
+	if (key == NULL || value == NULL)
+		return (NULL);
 	last = malloc(sizeof(t_env));
 	if (!last)
 		return (NULL);
@@ -50,7 +52,7 @@ char	*get_content(char *test)
 		i++;
 	}
 	str = malloc(sizeof(char) * (j + 1));
-	i = find_letter(test, '=');
+	i = find_letter(test, '=') + 1;
 	j = 0;
 	while (test[i])
 	{
@@ -62,13 +64,30 @@ char	*get_content(char *test)
 	return (str);
 }
 
-int	function_export(t_env *env, char *test)
+bool	get_equal(char *test)
+{
+	int	i;
+
+	i = 0;
+	while (test[i])
+	{
+		if (test[i] == '=')
+			return (true);
+		i++;
+	}
+	return (false);
+}
+
+t_env	*function_export(t_env *env, char *test)
 {
 	char	*key;
 	char	*content;
 
+	if (get_equal(test) == 0)
+		return (env);
 	key = get_key(test);
 	content = get_content(test);
 	env = lstadd_back_exp(env, key, content);
-	return (0);
+	env = lstfirst_env(env);
+	return (env);
 }
