@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/04 13:58:48 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/06 14:19:24 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,16 @@ typedef struct s_env
 {
 	char			*key;
 	char			*content;
+	bool			free_export;
 	struct s_env	*next;
 	struct s_env	*previous;
 }					t_env;
+
+typedef struct s_pwd
+{
+	char			*oldpwd;
+	char			*pwd;
+}					t_pwd;
 
 // TOKEN
 t_token				*lexing(t_token *mini_vars, char *line);
@@ -107,5 +114,6 @@ char				*get_key(char *envp);
 int					find_letter(char *envp, char letter);
 t_env				*function_export(t_env *env, char *test);
 t_env				*lstfirst_env(t_env *lst);
+t_pwd				*current_directory_path(t_pwd *pwd);
 
 #endif

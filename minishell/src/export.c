@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 15:20:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/04 14:27:40 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/06 13:35:05 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_env	*lstadd_back_exp(t_env *lst, char *key, char *value)
 		return (NULL);
 	last->key = key;
 	last->content = value;
+	last->free_export = true;
 	last->next = NULL;
 	if (lst == NULL)
 	{
@@ -83,10 +84,6 @@ t_env	*function_export(t_env *env, char *test)
 	char	*key;
 	char	*content;
 
-	// revoir le cas d'erreur export test = hello
-	// export test= hello (n'est pas erreur mais envoie un truc vide)
-	// export test =hello erreur
-	// export test==hello renvoie test="=hello"
 	if (get_equal(test) == 0)
 		return (env);
 	key = get_key(test);

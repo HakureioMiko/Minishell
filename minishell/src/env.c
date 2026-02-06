@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 18:19:17 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/04 14:15:22 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/06 13:34:32 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ t_env	*lstadd_back_env(t_env *lst, char *key, char *value)
 		return (NULL);
 	last->key = key;
 	last->content = value;
+	last->free_export = false;
 	last->next = NULL;
 	if (lst == NULL)
 	{

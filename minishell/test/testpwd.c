@@ -2,11 +2,18 @@
 
 int	main(void)
 {
-	char	cwd[1024];
+	t_pwd	*pwd;
+	char	cdw[1024];
 
-	if (getcwd(cwd, sizeof((cwd))) != NULL)
-		printf("%s\n", cwd);
+	pwd = malloc(sizeof(pwd));
+	if (getcwd(cdw, sizeof((cdw))) != NULL)
+	{
+		pwd->pwd = cdw;
+		printf("%s\n", cdw);
+		printf("%s\n", pwd->pwd);
+	}
 	else
 		perror("getwcd");
+
 	return (0);
 }

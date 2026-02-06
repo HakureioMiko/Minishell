@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/04 14:26:13 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/06 14:53:44 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,6 @@ void	handler(int signum)
 // signal(SIGQUIT, SIG_IGN);
 // signal(SIGINT, handler);
 
-// char	cwd[1024];
-
-// if (getcwd(cwd, sizeof((cwd))) != NULL)
-// 	printf("%s\n", cwd);
-// else
-// 	perror("getwcd");
-//
 // information a stocker
 
 // Permet d'avoir le path pour le dossier actuel (pwd)
@@ -56,18 +49,49 @@ void	handler(int signum)
 // si superieur a 255 il est unspecified
 // sinon exit sera le status de la derniere command ou 0 si il n'y a pas eu de commande
 
+void	free_env(t_env *env)
+{
+	t_env	*tmp;
+
+	while (env->next != NULL)
+	{
+		tmp = env->next;
+		free(env->key);
+		if (env->free_export == true)
+			free(env->content);
+		free(env);
+		env = tmp;
+	}
+	if (env->free_export == true)
+		free(env->content);
+	free(env->key);
+	free(env);
+}
+
+void	free_pwd(t_pwd *pwd)
+{
+	if (pwd->pwd)
+		free(pwd->pwd);
+	free(pwd);
+}
+
 int	main(int ac, char **av, char **envp)
 {
-	// t_token	*mini_vars;
 	t_env	*env;
-	// char	*line;
+	t_pwd	*pwd;
+	
 	(void)av;
 	(void)ac;
-	// mini_vars = NULL;
 	env = NULL;
+	pwd = malloc(sizeof(t_pwd));
+	pwd->pwd = NULL;
+	pwd->oldpwd = NULL;
 	env = env_content(env, envp);
-	// env = function_export(env, "Nimporte=quoi");
-	// env = function_export(env, "test==hello");
+	env = function_export(env, "Nimporte=quoi");
+	env = function_export(env, "test==hello");
+	pwd = current_directory_path(pwd);
+	printf("current : [%s]\n", pwd->pwd);
+	printf("current : [%s]", pwd->oldpwd);
 	// env = function_export(env, "Hi");
 	// le cas ou il y'a un
 	// export key=content
@@ -83,14 +107,8 @@ int	main(int ac, char **av, char **envp)
 	// printf("=");
 	// printf("%s", env->content);
 	env = lstfirst_env(env);
-	while (env->next != NULL)
-	{
-		free(env->key);
-		free(env->content);
-		env = env->next;
-	}
-	free(env->key);
-	free(env->content);
+	free_env(env);
+	free_pwd(pwd);
 	// while (true)
 	// {
 	// 	line = readline("Minishell > ");
