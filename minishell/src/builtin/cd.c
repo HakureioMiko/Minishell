@@ -6,8 +6,13 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 16:26:44 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/06 16:27:01 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/06 16:31:27 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void    cd_move_directory(t_pwd *pwd)
+{
+    
+}
