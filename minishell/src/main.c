@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/04 17:35:46 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/06 13:26:13 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	main(int ac, char **av, char **envp)
 	{
 		line = readline("Minishell > ");
 		if (line)
-			mini_vars = lexing(mini_vars, line);
+			mini_vars = lexing(&mini_vars, line);
 		if (!line)
 		{
 			free(line);
@@ -57,9 +57,7 @@ int	main(int ac, char **av, char **envp)
 				ft_miniclear(&mini_vars);
 			return (0);
 		}
-		// -> si NULL -> alors ctrl+D a ete actionne
-		mini_vars = lstfirst(mini_vars);
-		printmini(mini_vars);
+		printmini(&mini_vars);
 		ft_miniclear(&mini_vars);
 		free(line);
 	}

@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/05 17:24:55 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/06 13:27:47 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,10 +112,10 @@ typedef struct s_env
 }					t_env;
 
 // TOKEN
-t_token				*lexing(t_token *mini_vars, char *line);
-t_token				*lstfirst(t_token *lst);
+t_token				*lexing(t_token **mini_vars, char *line);
+//t_token				*lstfirst(t_token *lst);
 
-void				printmini(t_token *mini);
+void				printmini(t_token **mini);
 void				ft_miniclear(t_token **lst);
 
 // FONCTION DE L'ENVIRONNEMENT
