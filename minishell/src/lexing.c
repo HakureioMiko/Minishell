@@ -101,9 +101,12 @@ void	printmini(t_token **mini)
 			printf("quote : [%d]\n", (*mini)->sub_token->quote);
 			(*mini)->sub_token = (*mini)->sub_token->next;
 		}
+		if((*mini)->sub_token->var)
+		{
 		printf("sub_token : [%s]\n", (*mini)->sub_token->var);
 		printf("quote : [%d]\n", (*mini)->sub_token->quote);
 		*mini = (*mini)->next;
+		}
 	}
 	printf("valeur de fin : [%s]\n", (*mini)->var);
 	printf("type : [%d]\n", (*mini)->type);
@@ -113,8 +116,11 @@ void	printmini(t_token **mini)
 		printf("quote : [%d]\n", (*mini)->sub_token->quote);
 		(*mini)->sub_token = (*mini)->sub_token->next;
 	}
-	printf("sub_token : [%s]\n", (*mini)->sub_token->var);
-	printf("quote : [%d]\n", (*mini)->sub_token->quote);
+	if ((*mini)->sub_token->var)
+	{
+		printf("sub_token : [%s]\n", (*mini)->sub_token->var);
+		printf("quote : [%d]\n", (*mini)->sub_token->quote);
+	}
 }
 
 char	*add_char(char *buffer, char new)
@@ -150,7 +156,8 @@ void	buffer_full(t_token **mini_vars, char **buffer)
 {
 	if (*buffer && (*buffer[0] != '<' && *buffer[0] != '>'))
 	{
-		lstadd_back(addnode(*buffer, WORD), mini_vars);
+		if (!(*mini_vars))
+				lstadd_back(addnode(*buffer, WORD), mini_vars);
 		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
 		free(*buffer);
 		*buffer = NULL;
@@ -171,16 +178,19 @@ void	buffer_full(t_token **mini_vars, char **buffer)
 	}
 }
 
-void	normal_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
+v	qoid	normal_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
 {
 	if ((cara == ' ') || (cara >= 7 && cara <= 13))
+	{
+		if (!*buffer)
+			lstadd_back(addnode(" ", WORD), mini_vars);
 		buffer_full(mini_vars, buffer);
+	}
 	else if (cara == '|')
 	{
 		buffer_full(mini_vars, buffer);
-		*buffer = add_char(*buffer, cara);
-		lstadd_back(addnode(*buffer, PIPE), mini_vars);
-		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
+		lstadd_back(addnode("|", PIPE), mini_vars);
+		lstadd_sub_back(add_subnode("|", NONE), mini_vars);
 	}
 	else if (cara == '<')
 	{
@@ -191,9 +201,16 @@ void	normal_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
 			free(*buffer);
 			*buffer = NULL;
 		}
-		if (*buffer && *buffer[0] == '<')
+		else if (*buffer && *buffer[0] == '<')
 		{
 			lstadd_back(addnode("<<", HEREDOC), mini_vars);
+			lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
+			free(*buffer);
+			*buffer = NULL;
+		}
+		else if (*buffer && *buffer[0] == '>')
+		{
+			lstadd_back(addnode(*buffer, OUTFILE), mini_vars);
 			lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
 			free(*buffer);
 			*buffer = NULL;
@@ -210,12 +227,20 @@ void	normal_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
 			free(*buffer);
 			*buffer = NULL;
 		}
-		if (*buffer && *buffer[0] == '>')
+		else if (*buffer && *buffer[0] == '>')
 		{
 			lstadd_back(addnode(">>", APPEND), mini_vars);
 			lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
 			free(*buffer);
 			*buffer = NULL;
+		}
+		else if (*buffer && *buffer[0] == '<')
+		{
+			lstadd_back(addnode(*buffer, INFILE), mini_vars);
+			lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
+			free(*buffer);
+			*buffer = NULL;
+			*buffer = add_char(*buffer, cara);
 		}
 		else
 			*buffer = add_char(*buffer, cara);
@@ -223,32 +248,40 @@ void	normal_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
 	else if (cara == 39)
 	{
 		buffer_full(mini_vars, buffer);
-		if (!*buffer)
-			lstadd_back(addnode(" ", WORD), mini_vars);
+		/* if (!*buffer)
+			lstadd_back(addnode(" ", WORD), mini_vars); */
 		*state = IN_S_QUOTE;
 	}
 	else if (cara == '"')
 	{
 		buffer_full(mini_vars, buffer);
-		if(!*buffer)
-			lstadd_back(addnode(" ", WORD), mini_vars);
+		/* if(!*buffer)
+			lstadd_back(addnode(" ", WORD), mini_vars); */
 		*state = IN_D_QUOTE;
 	}
 	else if (cara >= '!' && cara <= '~')
+	{
+		if (*buffer && *buffer[0] == '<')
+		{
+			lstadd_back(addnode("<", INFILE), mini_vars);
+			lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
+			free(*buffer);
+			*buffer = NULL;
+		}
+		else if (*buffer && *buffer[0] == '>')
+		{
+			lstadd_back(addnode(">", OUTFILE), mini_vars);
+			lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
+			free(*buffer);
+			*buffer = NULL;
+		}
 		*buffer = add_char(*buffer, cara);
+	}
 }
 
 void	in_d_quote_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
 {
-	/* if (*buffer)
-	{
-		lstadd_back(addnode(*buffer, WORD), mini_vars);
-		lstadd_sub_back(add_subnode(*buffer, DOUBLE), mini_vars);
-		free(*buffer);
-		*buffer = NULL;
-	} */
-	//*buffer = add_char(*buffer, cara);
-	if (cara == 39)
+	/* if (cara == 39)
 	{
 		if (*buffer)
 		{
@@ -258,9 +291,9 @@ void	in_d_quote_state(char **buffer, char cara, t_state *state, t_token **mini_v
 			free(*buffer);
 			*buffer = NULL;
 		}
-		//*state = IN_S_QUOTE;
-	}
-	else if (cara == '"')
+		state = IN_S_QUOTE;
+	} */
+	if (cara == '"')
 	{
 		if (*buffer)
 		{
@@ -287,8 +320,8 @@ void	in_s_quote_state(char **buffer, char cara, t_state *state, t_token **mini_v
 		free(*buffer);
 		*buffer = NULL;
 	} */
-	//*buffer = add_char(*buffer, cara);
-	if (cara == '"')
+	//buffer = add_char(*buffer, cara);
+/* 	if (cara == '"')
 	{
 		if (*buffer)
 		{
@@ -298,9 +331,9 @@ void	in_s_quote_state(char **buffer, char cara, t_state *state, t_token **mini_v
 			free(*buffer);
 			*buffer = NULL;
 		}
-		//*state = IN_D_QUOTE;
-	}
-	else if (cara == 39)
+		*state = IN_D_QUOTE;
+	} */
+	if (cara == 39)
 	{
 		if (*buffer)
 		{
@@ -337,7 +370,7 @@ t_token	*lexing(t_token **mini_vars, char *line)
 			in_s_quote_state(&buffer, line[i], &state, mini_vars);
 		i++;
 	}
-	if (buffer && state == NORMAL)
+	if (buffer)
 	{
 		if (buffer[0] == '<')
 		{
@@ -351,7 +384,8 @@ t_token	*lexing(t_token **mini_vars, char *line)
 		}
 		else if (buffer[0] != '|')
 		{
-			lstadd_back(addnode(buffer, WORD), mini_vars);
+			if (!(*mini_vars))
+				lstadd_back(addnode(buffer, WORD), mini_vars);
 			lstadd_sub_back(add_subnode(buffer, NONE), mini_vars);
 		}
 		free(buffer);
