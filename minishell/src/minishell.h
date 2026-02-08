@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/08 18:48:29 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/08 21:30:54 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ typedef struct s_sub_token
 
 typedef struct s_token
 {
-	char			*var;
 	int				token_state;
 	t_sub_token		*sub_token;
 	t_token_type	type;
