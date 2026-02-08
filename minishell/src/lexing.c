@@ -21,6 +21,7 @@ t_token	*addnode(char *buffer, t_token_type type)
 	if (!add_node)
 		return (NULL);
 	add_node->var = ft_strdup(buffer);
+	add_node->token_state = 1;
 	add_node->sub_token = NULL;
 	add_node->type = type;
 	add_node->next = NULL;
@@ -40,6 +41,18 @@ t_sub_token *add_subnode(char *buffer, t_quote quote)
 	add_sub_node->next = NULL;
 	add_sub_node->prev = NULL;
 	return (add_sub_node);
+}
+
+t_token	*find_last(t_token **lst)
+{
+	t_token	*last;
+
+	if (!lst)
+		return (NULL);
+	last = *lst;
+	while (last->next != NULL)
+		last = last->next;
+	return (last);
 }
 
 void	lstadd_back(t_token *new, t_token **lst)
@@ -154,13 +167,14 @@ char	*add_char(char *buffer, char new)
 
 void	buffer_full(t_token **mini_vars, char **buffer)
 {
-	if (*buffer && (*buffer[0] != '<' && *buffer[0] != '>'))
+	/* if (*buffer && (*buffer[0] != '<' && *buffer[0] != '>'))
 	{
 		if (!(*mini_vars))
 				lstadd_back(addnode(*buffer, WORD), mini_vars);
 		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
 		free(*buffer);
 		*buffer = NULL;
+		//lstadd_back(addnode(" ", WORD), mini_vars);
 	}
 	else if (*buffer && *buffer[0] == '<')
 	{
@@ -168,6 +182,7 @@ void	buffer_full(t_token **mini_vars, char **buffer)
 		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
 		free(*buffer);
 		*buffer = NULL;
+		//lstadd_back(addnode(" ", WORD), mini_vars);
 	}
 	else if (*buffer && *buffer[0] == '>')
 	{
@@ -175,26 +190,55 @@ void	buffer_full(t_token **mini_vars, char **buffer)
 		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
 		free(*buffer);
 		*buffer = NULL;
-	}
+		//lstadd_back(addnode(" ", WORD), mini_vars);
+	} */
+	if (!*buffer)
+		return ;
+	lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
+	free(*buffer);
+	*buffer = NULL;
 }
 
-v	qoid	normal_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
+void	normal_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
 {
+	t_token	*current;
+
 	if ((cara == ' ') || (cara >= 7 && cara <= 13))
 	{
-		if (!*buffer)
-			lstadd_back(addnode(" ", WORD), mini_vars);
-		buffer_full(mini_vars, buffer);
+		if (*buffer)
+		{
+			if (!(*mini_vars))
+				lstadd_back(addnode(*buffer, WORD), mini_vars);
+			lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
+			free(*buffer);
+			*buffer = NULL;
+		}
+		current = find_last(mini_vars);
+		current->token_state = 0;
+		//lstadd_back(addnode(" ", WORD), mini_vars);
+		//if (!*buffer)
+		//	lstadd_back(addnode(" ", WORD), mini_vars);
+		//buffer_full(mini_vars, buffer);
 	}
 	else if (cara == '|')
 	{
-		buffer_full(mini_vars, buffer);
+		if (*buffer)
+		{
+			if (!(*mini_vars))
+				lstadd_back(addnode(*buffer, WORD), mini_vars);
+			lstadd_sub_back(add_subnode(*buffer, DOUBLE), mini_vars);
+			free(*buffer);
+			*buffer = NULL;
+		}
 		lstadd_back(addnode("|", PIPE), mini_vars);
 		lstadd_sub_back(add_subnode("|", NONE), mini_vars);
+		/* buffer_full(mini_vars, buffer);
+		lstadd_back(addnode("|", PIPE), mini_vars);
+		lstadd_sub_back(add_subnode("|", NONE), mini_vars); */
 	}
 	else if (cara == '<')
 	{
-		if (*buffer && *buffer[0] != '<')
+		/* if (*buffer && (*buffer[0] != '<' && *buffer[0] != '>'))
 		{
 			lstadd_back(addnode(*buffer, WORD), mini_vars);
 			lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
@@ -216,11 +260,21 @@ v	qoid	normal_state(char **buffer, char cara, t_state *state, t_token **mini_var
 			*buffer = NULL;
 		}
 		else
-			*buffer = add_char(*buffer, cara);
+			*buffer = add_char(*buffer, cara); */
+		if (*buffer)
+		{
+			if (!(*mini_vars))
+				lstadd_back(addnode(*buffer, WORD), mini_vars);
+			lstadd_sub_back(add_subnode(*buffer, DOUBLE), mini_vars);
+			free(*buffer);
+			*buffer = NULL;
+		}
+		lstadd_back(addnode("<", OUTFILE), mini_vars);
+		lstadd_sub_back(add_subnode("<", NONE), mini_vars);
 	}
 	else if (cara == '>')
 	{
-		if (*buffer && *buffer[0] != '>')
+		/* if (*buffer && (*buffer[0] != '>' && *buffer[0] != '<'))
 		{
 			lstadd_back(addnode(*buffer, WORD), mini_vars);
 			lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
@@ -243,25 +297,21 @@ v	qoid	normal_state(char **buffer, char cara, t_state *state, t_token **mini_var
 			*buffer = add_char(*buffer, cara);
 		}
 		else
-			*buffer = add_char(*buffer, cara);
+			*buffer = add_char(*buffer, cara); */
+		if (*buffer)
+		{
+			if (!(*mini_vars))
+				lstadd_back(addnode(*buffer, WORD), mini_vars);
+			lstadd_sub_back(add_subnode(*buffer, DOUBLE), mini_vars);
+			free(*buffer);
+			*buffer = NULL;
+		}
+		lstadd_back(addnode(">", OUTFILE), mini_vars);
+		lstadd_sub_back(add_subnode(">", NONE), mini_vars);
 	}
 	else if (cara == 39)
 	{
-		buffer_full(mini_vars, buffer);
-		/* if (!*buffer)
-			lstadd_back(addnode(" ", WORD), mini_vars); */
-		*state = IN_S_QUOTE;
-	}
-	else if (cara == '"')
-	{
-		buffer_full(mini_vars, buffer);
-		/* if(!*buffer)
-			lstadd_back(addnode(" ", WORD), mini_vars); */
-		*state = IN_D_QUOTE;
-	}
-	else if (cara >= '!' && cara <= '~')
-	{
-		if (*buffer && *buffer[0] == '<')
+	/* 	if (*buffer && *buffer[0] == '<')
 		{
 			lstadd_back(addnode("<", INFILE), mini_vars);
 			lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
@@ -274,7 +324,52 @@ v	qoid	normal_state(char **buffer, char cara, t_state *state, t_token **mini_var
 			lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
 			free(*buffer);
 			*buffer = NULL;
+		} */
+		if (!*mini_vars)
+			lstadd_back(addnode(" ", WORD), mini_vars);
+		/* if (*buffer)
+			lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars); */
+		//buffer_full(mini_vars, buffer);
+		current = find_last(mini_vars);
+		if (current->token_state == 0)
+			lstadd_back(addnode(" ", WORD), mini_vars);
+		*state = IN_S_QUOTE;
+	}
+	else if (cara == '"')
+	{
+		if (!*mini_vars)
+			lstadd_back(addnode(" ", WORD), mini_vars);
+		/* if (*buffer)
+			lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars); */
+		//buffer_full(mini_vars, buffer);
+		/* if(!*buffer)
+			lstadd_back(addnode(" ", WORD), mini_vars); */
+		current = find_last(mini_vars);
+		if (current->token_state == 0)
+			lstadd_back(addnode(" ", WORD), mini_vars);
+		*state = IN_D_QUOTE;
+	}
+	else if (cara >= '!' && cara <= '~')
+	{
+		/* if (*buffer && *buffer[0] == '<')
+		{
+			lstadd_back(addnode("<", INFILE), mini_vars);
+			lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
+			free(*buffer);
+			*buffer = NULL;
 		}
+		else if (*buffer && *buffer[0] == '>')
+		{
+			lstadd_back(addnode(">", OUTFILE), mini_vars);
+			lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
+			free(*buffer);
+			*buffer = NULL;
+		} */
+		if (!*mini_vars)
+			lstadd_back(addnode(" ", WORD), mini_vars);
+		current = find_last(mini_vars);
+		if (current->token_state == 0)
+			lstadd_back(addnode(" ", WORD), mini_vars);
 		*buffer = add_char(*buffer, cara);
 	}
 }
@@ -297,8 +392,8 @@ void	in_d_quote_state(char **buffer, char cara, t_state *state, t_token **mini_v
 	{
 		if (*buffer)
 		{
-			if (!(*mini_vars))
-				lstadd_back(addnode(*buffer, WORD), mini_vars);
+			//if (!(*mini_vars))
+			//	lstadd_back(addnode(*buffer, WORD), mini_vars);
 			lstadd_sub_back(add_subnode(*buffer, DOUBLE), mini_vars);
 			free(*buffer);
 			*buffer = NULL;
@@ -337,8 +432,8 @@ void	in_s_quote_state(char **buffer, char cara, t_state *state, t_token **mini_v
 	{
 		if (*buffer)
 		{
-			if (!(*mini_vars))
-				lstadd_back(addnode(*buffer, WORD), mini_vars);
+			//if (!(*mini_vars))
+				//lstadd_back(addnode(*buffer, WORD), mini_vars);
 			lstadd_sub_back(add_subnode(*buffer, SINGLE), mini_vars);
 			free(*buffer);
 			*buffer = NULL;
@@ -360,6 +455,12 @@ t_token	*lexing(t_token **mini_vars, char *line)
 	i = 0;
 	state = NORMAL;
 	buffer = NULL;
+	while (line[i] != '\0' && line[i] == ' ')
+	{
+		i++;
+	}
+	if (line[i] == '\0')
+		return (NULL);
 	while (line[i] != '\0')
 	{
 		if (state == NORMAL)
@@ -390,5 +491,7 @@ t_token	*lexing(t_token **mini_vars, char *line)
 		}
 		free(buffer);
 	}
+	if (!(*mini_vars))
+		lstadd_back(addnode(buffer, WORD), mini_vars);
 	return (*mini_vars);
 }

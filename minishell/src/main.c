@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/06 13:26:13 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/08 19:20:36 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,11 @@ int	main(int ac, char **av, char **envp)
 				ft_miniclear(&mini_vars);
 			return (0);
 		}
-		printmini(&mini_vars);
-		ft_miniclear(&mini_vars);
+		if (mini_vars)
+		{
+			printmini(&mini_vars);
+			ft_miniclear(&mini_vars);
+		}
 		free(line);
 	}
 }
