@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/08 21:30:54 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/09 16:33:42 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 
 #ifndef MINISHELL_H
@@ -26,6 +27,7 @@
 # define WHITE "\033[37m"
 # define RESET "\033[0m"
 
+# include "./builtin/builtin.h"
 # include "../libft/libft.h"
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -54,7 +56,6 @@
 // stat() lstat() fstat()
 
 # include <fcntl.h>
-# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 // getenv()
@@ -103,13 +104,7 @@ typedef struct s_token
 	struct s_token	*prev;
 }					t_token;
 
-typedef struct s_env
-{
-	char			*key;
-	char			*content;
-	struct s_env	*next;
-	struct s_env	*previous;
-}					t_env;
+
 
 // TOKEN
 t_token				*lexing(t_token **mini_vars, char *line);
@@ -118,7 +113,6 @@ t_token				*lexing(t_token **mini_vars, char *line);
 void				printmini(t_token **mini);
 void				ft_miniclear(t_token **lst);
 
-// FONCTION DE L'ENVIRONNEMENT
-t_env				*env_content(t_env *env, char **envp);
+
 
 #endif

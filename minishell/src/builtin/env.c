@@ -6,11 +6,11 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 18:19:17 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/03 15:01:42 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/09 12:26:39 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 char	*strcat_env(char *s1, char *s2, int size)
 {
@@ -72,6 +72,7 @@ t_env	*lstadd_back_env(t_env *lst, char *key, char *value)
 		return (NULL);
 	last->key = key;
 	last->content = value;
+	last->free_export = false;
 	last->next = NULL;
 	if (lst == NULL)
 	{
@@ -105,8 +106,12 @@ char	*get_key(char *envp)
 	char	*str;
 
 	i = find_letter(envp, '=');
+	if (i == 0)
+		return (NULL);
 	j = 0;
 	str = malloc(sizeof(char) * (i + 1));
+	if (!str)
+		return (NULL);
 	while (j < i)
 	{
 		str[j] = envp[j];
@@ -121,10 +126,8 @@ t_env	*env_content(t_env *env, char **envp)
 	char	*key;
 	char	*value;
 	int		i;
-	int		j;
 
 	i = 0;
-	j = 0;
 	while (envp[i])
 	{
 		key = get_key(envp[i]);
