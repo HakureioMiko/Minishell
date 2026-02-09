@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/09 13:56:54 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/09 16:28:12 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # define WHITE "\033[37m"
 # define RESET "\033[0m"
 
+# include "./builtin/builtin.h"
 # include "../libft/libft.h"
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -53,7 +54,6 @@
 // stat() lstat() fstat()
 
 # include <fcntl.h>
-# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 // getenv()
@@ -86,20 +86,7 @@ typedef struct s_token
 	struct s_token	*previous;
 }					t_token;
 
-typedef struct s_env
-{
-	char			*key;
-	char			*content;
-	bool			free_export;
-	struct s_env	*next;
-	struct s_env	*previous;
-}					t_env;
 
-typedef struct s_pwd
-{
-	char			*oldpwd;
-	char			*pwd;
-}					t_pwd;
 
 // TOKEN
 t_token				*lexing(t_token *mini_vars, char *line);
@@ -108,13 +95,6 @@ t_token				*lstfirst(t_token *lst);
 void				printmini(t_token *mini);
 void				ft_miniclear(t_token **lst);
 
-// FONCTION DE L'ENVIRONNEMENT
-t_env				*env_content(t_env *env, char **envp);
-char				*get_key(char *envp);
-int					find_letter(char *envp, char letter);
-t_env				*function_export(t_env *env, char *test);
-t_env				*lstfirst_env(t_env *lst);
-t_pwd				*current_directory_path(t_pwd *pwd);
-t_env				*function_unset(t_env *env, char *unset);
+
 
 #endif
