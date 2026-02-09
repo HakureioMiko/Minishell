@@ -6,11 +6,11 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 15:20:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/06 13:35:05 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/09 12:26:49 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 t_env	*lstadd_back_exp(t_env *lst, char *key, char *value)
 {

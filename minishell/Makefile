@@ -6,7 +6,7 @@
 #    By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/02/06 16:25:21 by mickzhan         ###   ########.fr        #
+#    Updated: 2026/02/09 12:27:35 by mickzhan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,9 +20,12 @@ SRC_DIR = src/
 SRC =	main.c \
 		lexing.c \
 		node_utils.c \
-		env.c \
-		export.c \
-		pwd.c 
+		parsing.c \
+		builtin/env.c \
+		builtin/export.c \
+		builtin/pwd.c \
+		builtin/cd.c \
+		builtin/echo.c
 
 OBJ_DIR = obj/
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
@@ -36,7 +39,7 @@ LIBFT_FLAGS = -L./$(LIBFT_DIR) -lft
 all: libft $(NAME)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
-	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -c $< -o $@
 	
 $(NAME): $(OBJ) $(LIBFT)
