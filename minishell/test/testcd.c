@@ -4,7 +4,7 @@ int	main(void)
 {
 	char	cdw[1024];
 
-	if (chdir("/home") != -1)
+	if (chdir("../..") != -1)
 		printf("success\n");
 	else
 		printf("directory doesnt exist\n");
