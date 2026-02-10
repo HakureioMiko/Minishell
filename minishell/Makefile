@@ -6,7 +6,7 @@
 #    By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/02/09 16:43:07 by ibrouin-         ###   ########.fr        #
+#    Updated: 2026/02/10 11:14:37 by ibrouin-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ SRC =	main.c \
 		lexing/add_nodes.c \
 		lexing/lexing_2.c \
 		lexing/lexing.c \
+		lexing/cara_types.c \
 		lexing/node_utils.c \
 		env.c \
 		

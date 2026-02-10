@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:14:19 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/09 16:43:39 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/10 11:16:26 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,14 @@ t_token				*lexing(t_token **mini_vars, char *line);
 char	*add_char(char *buffer, char new);
 void	in_d_quote_state(char **buf, char c, t_state *st, t_token **mini);
 void	in_s_quote_state(char **buf, char c, t_state *st, t_token **mini);
+void	close_token(t_token **mini_vars);
+void	buffer_full(t_token **mini_vars, char **buffer);
+
+// CARA_TYPES
+void	angles_brackets(char **buffer, char cara, t_token **mini_vars);
+void	quotes(char **buffer, char cara, t_token **mini_vars, t_state *state);
+void	meta_cara(char **buffer, char cara, t_token **mini_vars);
+void	other_cara(char **buffer, char cara, t_token **mini_vars);
 
 // NODE_UTILS
 void				printmini(t_token **mini);

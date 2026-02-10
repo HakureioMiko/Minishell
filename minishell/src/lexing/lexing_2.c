@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:30:32 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/09 16:39:47 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/10 11:17:02 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,42 @@ char	*add_char(char *buffer, char new)
 	temp[i] = '\0';
 	free(buffer);
 	return (temp);
+}
+
+void	close_token(t_token **mini_vars)
+{
+	t_token	*current;
+
+	if (*mini_vars)
+	{
+		current = find_last(mini_vars);
+		current->token_state = 0;
+	}
+}
+
+void	buffer_full(t_token **mini_vars, char **buffer)
+{
+	if (!*buffer)
+		return ;
+	if (*buffer && (*buffer[0] != '<' && *buffer[0] != '>'))
+	{
+		if (!(*mini_vars))
+			lstadd_back(addnode(WORD), mini_vars);
+		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
+		free(*buffer);
+		*buffer = NULL;
+	}
+	else if (*buffer && (*buffer[0] == '<' || *buffer[0] == '>'))
+	{
+		if (*buffer[0] == '<')
+			lstadd_back(addnode(INFILE), mini_vars);
+		if (*buffer[0] == '>')
+			lstadd_back(addnode(OUTFILE), mini_vars);
+		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
+		free(*buffer);
+		*buffer = NULL;
+		close_token(mini_vars);
+	}
 }
 
 void	in_d_quote_state(char **buf, char c, t_state *st, t_token **mini)
