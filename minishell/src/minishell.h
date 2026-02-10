@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/10 13:54:38 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/10 14:03:48 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ typedef struct s_token
 
 typedef enum e_event
 {
-	UNLINKED_QUOTE,
+	UNPAIR_QUOTE,
 	OPERATOR,
 	OPTION,
 	BUILTIN,
