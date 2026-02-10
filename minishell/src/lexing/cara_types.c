@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 11:11:16 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/10 14:31:32 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/10 18:02:39 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ void	angles_brackets(char **buffer, char cara, t_token **mini_vars)
 {
 	if (*buffer && (*buffer[0] != '<' && *buffer[0] != '>'))
 	{
+		if (!(*mini_vars))
+			lstadd_back(addnode(WORD), mini_vars);
 		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
 		free(*buffer);
 		*buffer = NULL;
@@ -73,12 +75,14 @@ void	meta_cara(char **buffer, char cara, t_token **mini_vars)
 {
 	if (*buffer && (*buffer[0] != '|'))
 	{
+		if (!(*mini_vars))
+			lstadd_back(addnode(WORD), mini_vars);
 		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
 		free(*buffer);
 		*buffer = NULL;
 		*buffer = add_char(*buffer, cara);
 	}
-	if (*buffer && *buffer[0] == cara)
+	else if (*buffer && *buffer[0] == cara)
 	{
 		if (cara == '|')
 		{
@@ -87,8 +91,6 @@ void	meta_cara(char **buffer, char cara, t_token **mini_vars)
 		}
 		free(*buffer);
 		*buffer = NULL;
-		lstadd_back(addnode(PIPE), mini_vars);
-		lstadd_sub_back(add_subnode("|", NONE), mini_vars);
 	}
 	else
 		*buffer = add_char(*buffer, cara);
@@ -99,19 +101,21 @@ void	other_cara(char **buffer, char cara, t_token **mini_vars)
 {
 	t_token	*current;
 
-	if (!*mini_vars)
-		lstadd_back(addnode(WORD), mini_vars);
-	if (*buffer && (*buffer[0] == '>' || *buffer[0] == '<'))
+	if (*buffer && (*buffer[0] == '>' || *buffer[0] == '<' || *buffer[0] == '|' ))
 	{
 		if (*buffer[0] == '<')
 			lstadd_back(addnode(INFILE), mini_vars);
 		if (*buffer[0] == '>')
 			lstadd_back(addnode(OUTFILE), mini_vars);
+		if (*buffer[0] == '|')
+			lstadd_back(addnode(PIPE), mini_vars);
 		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
 		free(*buffer);
 		*buffer = NULL;
 		close_token(mini_vars);
 	}
+	if (!*mini_vars)
+		lstadd_back(addnode(WORD), mini_vars);
 	current = find_last(mini_vars);
 	if (current->token_state == 0)
 		lstadd_back(addnode(WORD), mini_vars);

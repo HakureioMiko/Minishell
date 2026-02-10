@@ -23,7 +23,9 @@ void	normal_state(char **buffer, char cara, t_state *state, t_token **mini)
 	else if (cara == '|')
 		meta_cara(buffer, cara, mini);
 	else if (cara == '<' || cara == '>')
+	{
 		angles_brackets(buffer, cara, mini);
+	}
 	else if (cara == 39 || cara == '"')
 		quotes(buffer, cara, mini, state);
 	else if (cara >= '!' && cara <= '~')
@@ -68,10 +70,13 @@ void	last_token(char **buffer, t_token **mini_vars)
 		lstadd_back(addnode(OUTFILE), mini_vars);
 		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
 	}
-	else if (*buffer[0] != '|')
+	else if (*buffer[0] == '|')
 	{
-		if (!(*mini_vars))
-			lstadd_back(addnode(WORD), mini_vars);
+		lstadd_back(addnode(PIPE), mini_vars);
+		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
+	}
+	else if (*buffer)
+	{
 		current = find_last(mini_vars);
 		if (current->token_state == 0)
 			lstadd_back(addnode(WORD), mini_vars);

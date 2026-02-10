@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 11:35:46 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/09 16:34:37 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/10 17:03:50 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,14 @@ void	printmini(t_token **mini)
 	while ((*mini)->next != NULL)
 	{
 		printf("token %d [%d]\n", i, (*mini)->type);
-		while ((*mini)->sub_token->next != NULL)
+		if ((*mini)->sub_token->var)
 		{
-			printf("	sub_token : [%s]\n", (*mini)->sub_token->var);
-			printf("	quote : [%d]\n", (*mini)->sub_token->quote);
-			(*mini)->sub_token = (*mini)->sub_token->next;
+			while ((*mini)->sub_token->next != NULL)
+			{
+				printf("	sub_token : [%s]\n", (*mini)->sub_token->var);
+				printf("	quote : [%d]\n", (*mini)->sub_token->quote);
+				(*mini)->sub_token = (*mini)->sub_token->next;
+			}
 		}
 		if ((*mini)->sub_token->var)
 		{

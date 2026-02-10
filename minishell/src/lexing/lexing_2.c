@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:30:32 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/10 14:23:24 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/10 16:56:09 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	buffer_full(t_token **mini_vars, char **buffer)
 {
 	if (!*buffer)
 		return ;
-	if (*buffer && (*buffer[0] != '<' && *buffer[0] != '>' && *buffer[0] != '!'))
+	if (*buffer && (*buffer[0] != '<' && *buffer[0] != '>' && *buffer[0] != '|'))
 	{
 		if (!(*mini_vars))
 			lstadd_back(addnode(WORD), mini_vars);
