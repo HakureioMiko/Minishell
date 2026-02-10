@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/09 17:08:41 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/10 11:28:50 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ int	main(int ac, char **av, char **envp)
 {
 	t_env	*env;
 	t_pwd	*pwd;
-
+	int		exit_error;
+	
 	(void)av;
 	(void)ac;
 	(void)envp;
@@ -63,15 +64,16 @@ int	main(int ac, char **av, char **envp)
 	pwd = malloc(sizeof(t_pwd));
 	pwd->pwd = NULL;
 	pwd->oldpwd = NULL;
+	exit_error = function_echo("hello, world", 1);
 	// env = env_content(env, envp);
 	// env = function_unset(env, "SYSTEMD_EXEC_PID");
 	// env = function_unset(env, "randomWORD");
 	// env = function_export(env, "test==hello");
 	// env = function_unset(env, "test");
 
-	pwd = current_directory_path(pwd);
-	printf("current : [%s]\n", pwd->pwd);
-	printf("current : [%s]", pwd->oldpwd);
+	// pwd = current_directory_path(pwd);
+	// printf("current : [%s]\n", pwd->pwd);
+	// printf("current : [%s]", pwd->oldpwd);
 	// env = function_export(env, "Hi");
 	// le cas ou il y'a un
 	// export key=content
@@ -89,6 +91,7 @@ int	main(int ac, char **av, char **envp)
 	// env = lstfirst_env(env);
 	// free_env(env);
 	free_pwd(pwd);
+	return (exit_error);
 }
 
 // Test KILL

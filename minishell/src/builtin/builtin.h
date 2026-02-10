@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:16:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/09 17:35:23 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/10 11:22:20 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,7 @@ char				*ft_strcpy(char *s1, char *s2);
 
 void				free_pwd(t_pwd *pwd);
 void				free_env(t_env *env);
+
+bool				function_echo(char *parse, bool option);
 
 #endif
