@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/10 14:37:26 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/10 14:54:38 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,7 @@ typedef struct s_parser
 	int	event_status;
 
 }		t_parser;
+
+int		parser(t_token *token);
 
 #endif
