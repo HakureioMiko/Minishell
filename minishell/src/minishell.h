@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/10 11:45:29 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/10 13:54:38 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,22 @@ typedef struct s_token
 	struct s_token		*next;
 	struct s_token		*prev;
 }						t_token;
+
+typedef enum e_event
+{
+	UNLINKED_QUOTE,
+	OPERATOR,
+	OPTION,
+	BUILTIN,
+	EXECUTABLE
+}						t_event;
+
+typedef struct s_parser
+{
+	int					exit_status;
+	int					event_status;
+
+}						t_parser;
 
 // TOKEN
 t_token					*lexing(t_token **mini_vars, char *line);

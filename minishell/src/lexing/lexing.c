@@ -28,7 +28,7 @@ t_token	*addnode(t_token_type type)
 	return (add_node);
 }
 
-t_sub_token *add_subnode(char *buffer, t_quote quote)
+t_sub_token	*add_subnode(char *buffer, t_quote quote)
 {
 	t_sub_token	*add_sub_node;
 
@@ -115,13 +115,13 @@ void	printmini(t_token **mini)
 			printf("	quote : [%d]\n", (*mini)->sub_token->quote);
 			(*mini)->sub_token = (*mini)->sub_token->next;
 		}
-		if((*mini)->sub_token->var)
+		if ((*mini)->sub_token->var)
 		{
-		printf("	sub_token : [%s]\n", (*mini)->sub_token->var);
-		printf("	quote : [%d]\n", (*mini)->sub_token->quote);
-		*mini = (*mini)->next;
+			printf("	sub_token : [%s]\n", (*mini)->sub_token->var);
+			printf("	quote : [%d]\n", (*mini)->sub_token->quote);
+			*mini = (*mini)->next;
 		}
-		i ++;
+		i++;
 	}
 	printf("token %d [%d]\n", i, (*mini)->type);
 	while ((*mini)->sub_token->next != NULL)
@@ -150,10 +150,10 @@ char	*add_char(char *buffer, char new)
 	i = 0;
 	temp = malloc(sizeof(char) * len + 2);
 	if (!temp)
-		return(NULL);
+		return (NULL);
 	if (buffer)
 	{
-		while(buffer[i] != '\0')
+		while (buffer[i] != '\0')
 		{
 			temp[i] = buffer[i];
 			i++;
@@ -169,13 +169,13 @@ char	*add_char(char *buffer, char new)
 void	buffer_full(t_token **mini_vars, char **buffer)
 {
 	t_token	*current;
-	
+
 	if (!*buffer)
 		return ;
 	if (*buffer && (*buffer[0] != '<' && *buffer[0] != '>'))
 	{
 		if (!(*mini_vars))
-				lstadd_back(addnode(WORD), mini_vars);
+			lstadd_back(addnode(WORD), mini_vars);
 		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
 		free(*buffer);
 		*buffer = NULL;
@@ -206,7 +206,8 @@ void	buffer_full(t_token **mini_vars, char **buffer)
 	}
 }
 
-void	normal_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
+void	normal_state(char **buffer, char cara, t_state *state,
+		t_token **mini_vars)
 {
 	t_token	*current;
 
@@ -286,7 +287,7 @@ void	normal_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
 			*buffer = NULL;
 			*buffer = add_char(*buffer, cara);
 		}
-		else 
+		else
 			*buffer = add_char(*buffer, cara);
 		if (*mini_vars)
 		{
@@ -333,13 +334,14 @@ void	normal_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
 	}
 }
 
-void	in_d_quote_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
+void	in_d_quote_state(char **buffer, char cara, t_state *state,
+		t_token **mini_vars)
 {
 	if (*mini_vars)
-		{
-			if (find_last(mini_vars)->token_state == 0)
-				lstadd_back(addnode(WORD), mini_vars);
-		}
+	{
+		if (find_last(mini_vars)->token_state == 0)
+			lstadd_back(addnode(WORD), mini_vars);
+	}
 	if (cara == '"')
 	{
 		if (!(*mini_vars))
@@ -358,13 +360,14 @@ void	in_d_quote_state(char **buffer, char cara, t_state *state, t_token **mini_v
 		*buffer = add_char(*buffer, cara);
 }
 
-void	in_s_quote_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
+void	in_s_quote_state(char **buffer, char cara, t_state *state,
+		t_token **mini_vars)
 {
 	if (*mini_vars)
-		{
-			if (find_last(mini_vars)->token_state == 0)
-				lstadd_back(addnode(WORD), mini_vars);
-		}
+	{
+		if (find_last(mini_vars)->token_state == 0)
+			lstadd_back(addnode(WORD), mini_vars);
+	}
 	if (cara == 39)
 	{
 		if (!(*mini_vars))
