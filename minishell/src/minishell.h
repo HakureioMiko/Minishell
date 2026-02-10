@@ -6,11 +6,9 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/09 16:33:42 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/10 11:45:29 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -27,8 +25,8 @@
 # define WHITE "\033[37m"
 # define RESET "\033[0m"
 
-# include "./builtin/builtin.h"
 # include "../libft/libft.h"
+# include "./builtin/builtin.h"
 # include <readline/history.h>
 # include <readline/readline.h>
 // readline rl_clear_history, rl_on_new_line,
@@ -68,7 +66,7 @@ typedef enum e_state
 	NORMAL,
 	IN_D_QUOTE,
 	IN_S_QUOTE
-}				t_state;
+}						t_state;
 
 typedef enum e_token_type
 {
@@ -78,41 +76,37 @@ typedef enum e_token_type
 	OUTFILE,
 	HEREDOC,
 	APPEND
-}				t_token_type;
+}						t_token_type;
 
 typedef enum e_quote
 {
 	NONE,
 	SINGLE,
 	DOUBLE
-}				t_quote;
+}						t_quote;
 
 typedef struct s_sub_token
 {
-	char 				*var;
+	char				*var;
 	t_quote				quote;
 	struct s_sub_token	*next;
 	struct s_sub_token	*prev;
-}				t_sub_token;
+}						t_sub_token;
 
 typedef struct s_token
 {
-	int				token_state;
-	t_sub_token		*sub_token;
-	t_token_type	type;
-	struct s_token	*next;
-	struct s_token	*prev;
-}					t_token;
-
-
+	int					token_state;
+	t_sub_token			*sub_token;
+	t_token_type		type;
+	struct s_token		*next;
+	struct s_token		*prev;
+}						t_token;
 
 // TOKEN
-t_token				*lexing(t_token **mini_vars, char *line);
-//t_token				*lstfirst(t_token *lst);
+t_token					*lexing(t_token **mini_vars, char *line);
+// t_token				*lstfirst(t_token *lst);
 
-void				printmini(t_token **mini);
-void				ft_miniclear(t_token **lst);
-
-
+void					printmini(t_token **mini);
+void					ft_miniclear(t_token **lst);
 
 #endif
