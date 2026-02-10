@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:14:19 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/10 11:16:26 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/10 14:30:19 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,11 @@ typedef enum e_token_type
 	INFILE,
 	OUTFILE,
 	HEREDOC,
-	APPEND
+	APPEND,
+	OR,
+	AND,
+	LEFT_PAR,
+	RIGHT_PAR
 }				t_token_type;
 
 typedef enum e_quote
