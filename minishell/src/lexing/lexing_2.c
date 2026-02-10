@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:30:32 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/10 11:17:02 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/10 14:23:24 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	buffer_full(t_token **mini_vars, char **buffer)
 {
 	if (!*buffer)
 		return ;
-	if (*buffer && (*buffer[0] != '<' && *buffer[0] != '>'))
+	if (*buffer && (*buffer[0] != '<' && *buffer[0] != '>' && *buffer[0] != '!'))
 	{
 		if (!(*mini_vars))
 			lstadd_back(addnode(WORD), mini_vars);
@@ -64,12 +64,14 @@ void	buffer_full(t_token **mini_vars, char **buffer)
 		free(*buffer);
 		*buffer = NULL;
 	}
-	else if (*buffer && (*buffer[0] == '<' || *buffer[0] == '>'))
+	else if (*buffer && (*buffer[0] == '<' || *buffer[0] == '>' || *buffer[0] == '|'))
 	{
 		if (*buffer[0] == '<')
 			lstadd_back(addnode(INFILE), mini_vars);
 		if (*buffer[0] == '>')
 			lstadd_back(addnode(OUTFILE), mini_vars);
+		if (*buffer[0] == '|')
+			lstadd_back(addnode(PIPE), mini_vars);
 		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
 		free(*buffer);
 		*buffer = NULL;
