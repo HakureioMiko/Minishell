@@ -1,34 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/10 14:00:34 by ibrouin-         ###   ########.fr       */
+/*   Created: 2026/02/09 16:14:19 by ibrouin-          #+#    #+#             */
+/*   Updated: 2026/02/10 11:16:26 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-#ifndef MINISHELL_H
-# define MINISHELL_H
-
-// Unicode Color
-// Usage > printf("%s Hello World %s", COLOR, RESET);
-# define BLACK "\033[30m"
-# define RED "\033[31m"
-# define GREEN "\033[32m"
-# define YELLOW "\033[33m"
-# define BLUE "\033[34m"
-# define MAGENTA "\033[35m"
-# define CYAN "\033[36m"
-# define WHITE "\033[37m"
-# define RESET "\033[0m"
+#ifndef LEXER_H
+# define LEXER_H
 
 # include "../libft/libft.h"
-# include "./builtin/builtin.h"
-# include "lexing/lexer.h"
 # include <readline/history.h>
 # include <readline/readline.h>
 // readline rl_clear_history, rl_on_new_line,
@@ -56,6 +41,7 @@
 // stat() lstat() fstat()
 
 # include <fcntl.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 // getenv()
@@ -68,7 +54,7 @@ typedef enum e_state
 	NORMAL,
 	IN_D_QUOTE,
 	IN_S_QUOTE
-}						t_state;
+}				t_state;
 
 typedef enum e_token_type
 {
@@ -78,37 +64,57 @@ typedef enum e_token_type
 	OUTFILE,
 	HEREDOC,
 	APPEND
-}						t_token_type;
+}				t_token_type;
 
 typedef enum e_quote
 {
 	NONE,
 	SINGLE,
 	DOUBLE
-}						t_quote;
+}				t_quote;
 
 typedef struct s_sub_token
 {
-	char				*var;
+	char 				*var;
 	t_quote				quote;
 	struct s_sub_token	*next;
 	struct s_sub_token	*prev;
-}						t_sub_token;
+}				t_sub_token;
 
 typedef struct s_token
 {
-	int					token_state;
-	t_sub_token			*sub_token;
-	t_token_type		type;
-	struct s_token		*next;
-	struct s_token		*prev;
-}						t_token;
+	int				token_state;
+	t_sub_token		*sub_token;
+	t_token_type	type;
+	struct s_token	*next;
+	struct s_token	*prev;
+}					t_token;
 
-// TOKEN
-t_token					*lexing(t_token **mini_vars, char *line);
-// t_token				*lstfirst(t_token *lst);
+// ADD_NODES
+t_token	    *addnode(t_token_type type);
+t_sub_token *add_subnode(char *buffer, t_quote quote);
+t_token	    *find_last(t_token **lst);
+void	    lstadd_back(t_token *new, t_token **lst);
+void	    lstadd_sub_back(t_sub_token *new, t_token **lst);
 
-void					printmini(t_token **mini);
-void					ft_miniclear(t_token **lst);
+// LEXING
+t_token				*lexing(t_token **mini_vars, char *line);
+
+// LEXING_2
+char	*add_char(char *buffer, char new);
+void	in_d_quote_state(char **buf, char c, t_state *st, t_token **mini);
+void	in_s_quote_state(char **buf, char c, t_state *st, t_token **mini);
+void	close_token(t_token **mini_vars);
+void	buffer_full(t_token **mini_vars, char **buffer);
+
+// CARA_TYPES
+void	angles_brackets(char **buffer, char cara, t_token **mini_vars);
+void	quotes(char **buffer, char cara, t_token **mini_vars, t_state *state);
+void	meta_cara(char **buffer, char cara, t_token **mini_vars);
+void	other_cara(char **buffer, char cara, t_token **mini_vars);
+
+// NODE_UTILS
+void				printmini(t_token **mini);
+void				ft_miniclear(t_token **lst);
 
 #endif
