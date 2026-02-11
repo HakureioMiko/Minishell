@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/10 16:53:58 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/11 16:35:58 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,22 +72,17 @@
 # include <unistd.h>
 // getcwd() chdir() isatty() ttyname() ttyslot()
 
-typedef enum e_event
+typedef struct s_cmd
 {
-	OPERATOR,
-	OPTION,
-	BUILTIN,
-	EXECUTABLE
-}			t_event;
+	int				last_command_status;
+	int				outfile;
+	int				infile;
+	char			**argv;
 
-typedef struct s_parser
-{
-	int		exit_status;
-	int		event_status;
-	int		last_command;
-	t_event	event;
-}			t_parser;
+	struct s_cmd	*next;
+	struct s_cmd	*previous;
+}					t_cmd;
 
-int			parser(t_token *token);
+int					parser(t_token *token, t_env *envp);
 
 #endif

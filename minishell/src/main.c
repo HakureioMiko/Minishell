@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/10 17:30:19 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/11 17:26:37 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,25 @@ void	handler(int signum)
 // signal(SIGQUIT, SIG_IGN);
 // signal(SIGINT, handler);
 
+
 int	main(int ac, char **av, char **envp)
 {
 	char		*line;
 	t_token		*mini_vars;
-	// t_parser	*parse;
+	t_env		*env;
 
 	(void)av;
 	(void)ac;
-	(void)envp;
 	mini_vars = NULL;
+	env = NULL;
+	env = env_content(env, envp);
 	while (true)
 	{
 		line = readline("Minishell > ");
 		if (line)
 		{
 			mini_vars = lexing(&mini_vars, line);
-			parser(mini_vars);
+			parser(mini_vars, env);
 		}
 		if (*line)
 			add_history(line);
