@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/13 01:30:33 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/13 16:10:02 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,33 @@
 
 // ARBRE SYNTAXIQUE
 
+typedef enum e_ast_type
+{
+	WORD,
+	PIPE,
+	AND,
+	OR,
+	SUBSHELL,
+	LEFT_PAR,
+	RIGHT_PAR
+}					t_ast_type;
+
+typedef struct s_redir
+{
+	t_token_type	type;
+	t_token			*target;
+	struct s_red	*next;
+}					t_redir;
+
 typedef struct s_ast
 {
-	char			**argv;
-	t_token_type	type;
+	t_ast_type		type;
+
 	struct s_ast	*left;
 	struct s_ast	*right;
+
+	t_token			*cmd_token;
+	t_redir			*redirs;
 }					t_ast;
 
 int					parser(t_token *token);
