@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/13 03:29:01 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/13 03:47:28 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,7 +247,6 @@ int	priority_operator(t_ast *ast, t_token *token)
 t_ast	*recursive_ast(t_ast *ast, t_token *token)
 {
 	ast = lstadd_back_ast(ast);
-	ast->type = priority_operator(ast, token);
 	return (ast);
 }
 

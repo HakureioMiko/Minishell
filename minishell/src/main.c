@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/13 01:08:11 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/13 03:34:45 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ int	main(int ac, char **av, char **envp)
 			mini_vars = lexing(&mini_vars, line);
 			parser(mini_vars);
 		}
-		//if (*line)
-		//	add_history(line);
+		if (*line)
+			add_history(line);
 		if (!line)
 		{
 			free(line);
