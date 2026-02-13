@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:14:19 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/10 14:30:19 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/12 23:23:20 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ typedef enum e_state
 {
 	NORMAL,
 	IN_D_QUOTE,
-	IN_S_QUOTE
+	IN_S_QUOTE,
+	ERROR
 }				t_state;
 
 typedef enum e_token_type
@@ -66,8 +67,8 @@ typedef enum e_token_type
 	APPEND,
 	OR,
 	AND,
-	LEFT_PAR,
-	RIGHT_PAR
+	L_PAR,
+	R_PAR
 }				t_token_type;
 
 typedef enum e_quote
@@ -98,8 +99,8 @@ typedef struct s_token
 t_token	    *addnode(t_token_type type);
 t_sub_token *add_subnode(char *buffer, t_quote quote);
 t_token	    *find_last(t_token **lst);
-void	    lstadd_back(t_token *new, t_token **lst);
-void	    lstadd_sub_back(t_sub_token *new, t_token **lst);
+void	    lstadd_back(t_token *new, t_token **lst, t_state *state);
+void	    lstadd_sub_back(t_sub_token *new, t_token **lst, t_state *state);
 
 // LEXING
 t_token				*lexing(t_token **mini_vars, char *line);
@@ -109,16 +110,28 @@ char	*add_char(char *buffer, char new);
 void	in_d_quote_state(char **buf, char c, t_state *st, t_token **mini);
 void	in_s_quote_state(char **buf, char c, t_state *st, t_token **mini);
 void	close_token(t_token **mini_vars);
-void	buffer_full(t_token **mini_vars, char **buffer);
+void	buffer_full(t_token **mini_vars, char **buffer, t_state *state);
 
 // CARA_TYPES
-void	angles_brackets(char **buffer, char cara, t_token **mini_vars);
+void	angles_brackets(char **buffer, char cara, t_token **mini_vars, t_state *state);
 void	quotes(char **buffer, char cara, t_token **mini_vars, t_state *state);
-void	meta_cara(char **buffer, char cara, t_token **mini_vars);
-void	other_cara(char **buffer, char cara, t_token **mini_vars);
+void	meta_cara(char **buffer, char cara, t_token **mini_vars, t_state *state);
+void	other_cara(char **buffer, char cara, t_token **mini_vars, t_state *state);
+void	brackets(char **buffer, char cara, t_token **mini_vars, t_state *state);
 
 // NODE_UTILS
 void				printmini(t_token **mini);
 void				ft_miniclear(t_token **lst);
+void				ft_minidelone(t_sub_token *lst);
+
+
+
+
+
+void *ft_malloc(size_t size);
+
+
+
+
 
 #endif

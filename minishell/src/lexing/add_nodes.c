@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:08:35 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/10 11:45:09 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/13 14:48:20 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ t_sub_token	*add_subnode(char *buffer, t_quote quote)
 
 	add_sub_node = malloc(sizeof(t_sub_token));
 	if (!add_sub_node)
+	{
 		return (NULL);
+	}
 	add_sub_node->var = ft_strdup(buffer);
 	add_sub_node->quote = quote;
 	add_sub_node->next = NULL;
@@ -53,12 +55,15 @@ t_token	*find_last(t_token **lst)
 	return (last);
 }
 
-void	lstadd_back(t_token *new, t_token **lst)
+void	lstadd_back(t_token *new, t_token **lst, t_state *state)
 {
 	t_token	*last;
 
 	if (!lst || !new)
+	{
+		*state = ERROR;
 		return ;
+	}
 	if (!*lst)
 	{
 		*lst = new;
@@ -72,13 +77,16 @@ void	lstadd_back(t_token *new, t_token **lst)
 	new->next = NULL;
 }
 
-void	lstadd_sub_back(t_sub_token *new, t_token **lst)
+void	lstadd_sub_back(t_sub_token *new, t_token **lst, t_state *state)
 {
 	t_sub_token	*last;
 	t_token		*current;
 
 	if (!lst || !new)
+	{
+		*state = ERROR;
 		return ;
+	}
 	current = *lst;
 	while (current->next != NULL)
 		current = current->next;

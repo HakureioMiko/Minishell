@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:30:32 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/10 16:56:09 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/12 22:27:01 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,27 +52,30 @@ void	close_token(t_token **mini_vars)
 	}
 }
 
-void	buffer_full(t_token **mini_vars, char **buffer)
+void	buffer_full(t_token **mini_vars, char **buffer, t_state *state)
 {
 	if (!*buffer)
 		return ;
-	if (*buffer && (*buffer[0] != '<' && *buffer[0] != '>' && *buffer[0] != '|'))
+	if (*buffer && (*buffer[0] != '<' && *buffer[0] != '>' && *buffer[0] != '|' && *buffer[0] != '&'))
 	{
 		if (!(*mini_vars))
-			lstadd_back(addnode(WORD), mini_vars);
-		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
+			lstadd_back(addnode(WORD), mini_vars, state);
+		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars, state);
 		free(*buffer);
 		*buffer = NULL;
 	}
-	else if (*buffer && (*buffer[0] == '<' || *buffer[0] == '>' || *buffer[0] == '|'))
+	else if (*buffer && (*buffer[0] == '<' || *buffer[0] == '>' || *buffer[0] == '|'
+		|| *buffer[0] == '&'))
 	{
 		if (*buffer[0] == '<')
-			lstadd_back(addnode(INFILE), mini_vars);
+			lstadd_back(addnode(INFILE), mini_vars, state);
 		if (*buffer[0] == '>')
-			lstadd_back(addnode(OUTFILE), mini_vars);
+			lstadd_back(addnode(OUTFILE), mini_vars, state);
 		if (*buffer[0] == '|')
-			lstadd_back(addnode(PIPE), mini_vars);
-		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
+			lstadd_back(addnode(PIPE), mini_vars, state);
+		if (*buffer[0] == '&')
+			lstadd_back(addnode(WORD), mini_vars, state);
+		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars, state);
 		free(*buffer);
 		*buffer = NULL;
 		close_token(mini_vars);
@@ -84,17 +87,17 @@ void	in_d_quote_state(char **buf, char c, t_state *st, t_token **mini)
 	if (*mini)
 	{
 		if (find_last(mini)->token_state == 0)
-			lstadd_back(addnode(WORD), mini);
+			lstadd_back(addnode(WORD), mini, st);
 	}
 	if (c == '"')
 	{
 		if (!(*mini))
-			lstadd_back(addnode(WORD), mini);
+			lstadd_back(addnode(WORD), mini, st);
 		if (!*buf)
-			lstadd_sub_back(add_subnode("", DOUBLE), mini);
+			lstadd_sub_back(add_subnode("", DOUBLE), mini, st);
 		if (*buf)
 		{
-			lstadd_sub_back(add_subnode(*buf, DOUBLE), mini);
+			lstadd_sub_back(add_subnode(*buf, DOUBLE), mini, st);
 			free(*buf);
 			*buf = NULL;
 		}
@@ -109,17 +112,17 @@ void	in_s_quote_state(char **buf, char c, t_state *st, t_token **mini)
 	if (*mini)
 	{
 		if (find_last(mini)->token_state == 0)
-			lstadd_back(addnode(WORD), mini);
+			lstadd_back(addnode(WORD), mini, st);
 	}
 	if (c == 39)
 	{
 		if (!(*mini))
-			lstadd_back(addnode(WORD), mini);
+			lstadd_back(addnode(WORD), mini, st);
 		if (!*buf)
-			lstadd_sub_back(add_subnode("", SINGLE), mini);
+			lstadd_sub_back(add_subnode("", SINGLE), mini, st);
 		if (*buf)
 		{
-			lstadd_sub_back(add_subnode(*buf, SINGLE), mini);
+			lstadd_sub_back(add_subnode(*buf, SINGLE), mini, st);
 			free(*buf);
 			*buf = NULL;
 		}

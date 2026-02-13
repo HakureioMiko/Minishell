@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+         #
+#    By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/02/10 14:14:45 by mickzhan         ###   ########.fr        #
+#    Updated: 2026/02/12 22:56:47 by ibrouin-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SRC =	main.c \
 		lexing/lexing.c \
 		lexing/cara_types.c \
 		lexing/node_utils.c \
+		lexing/test.c \
 		builtin/env.c \
 		builtin/export.c \
 		builtin/pwd.c \

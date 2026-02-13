@@ -6,29 +6,41 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 11:35:46 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/10 17:03:50 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/12 23:09:42 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-void	ft_minidelone(t_token *lst)
+void	ft_minidelone(t_sub_token *lst)
 {
+	if (!lst)
+		return ;
+	free(lst->var);
 	free(lst);
 }
 
 void	ft_miniclear(t_token **lst)
 {
-	t_token	*cursor;
-	t_token	*next;
+	t_token		*cursor;
+	t_sub_token	*sub_cursor;
+	t_sub_token	*sub_next;
+	t_token		*next;
 
 	if (!lst || !*lst)
 		return ;
 	cursor = *lst;
 	while (cursor)
 	{
+		sub_cursor = cursor->sub_token;
+		while (sub_cursor)
+		{
+			sub_next = sub_cursor->next;
+			ft_minidelone(sub_cursor);
+			sub_cursor = sub_next;
+		}
 		next = cursor->next;
-		ft_minidelone(cursor);
+		free(cursor);
 		cursor = next;
 	}
 	*lst = NULL;
