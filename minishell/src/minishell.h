@@ -6,10 +6,9 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/10 14:08:59 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/13 01:30:33 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -25,6 +24,16 @@
 # define CYAN "\033[36m"
 # define WHITE "\033[37m"
 # define RESET "\033[0m"
+
+// MACRO SORTIE D'ERREUR
+
+# define NORMAL_STATUS 0
+# define ERROR_STATUS 1
+# define ERROR_SYNTAX_STATUS 2
+# define EXECUTABLE_NOT_POSSIBLE 126
+# define COMMAND_NOT_FOUND 127
+# define INTERRUPT_CTRL 130
+# define QUIT_CTRL 131
 
 # include "../libft/libft.h"
 # include "./builtin/builtin.h"
@@ -63,5 +72,16 @@
 # include <unistd.h>
 // getcwd() chdir() isatty() ttyname() ttyslot()
 
+// ARBRE SYNTAXIQUE
+
+typedef struct s_ast
+{
+	char			**argv;
+	t_token_type	type;
+	struct s_ast	*left;
+	struct s_ast	*right;
+}					t_ast;
+
+int					parser(t_token *token);
 
 #endif
