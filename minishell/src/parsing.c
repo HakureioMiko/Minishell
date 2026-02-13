@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/13 02:26:45 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/13 03:29:01 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,22 +168,86 @@ bool	check_token(t_token *token)
 // 	}
 // }
 
+int	priority_redi(t_token *token)
+{
+	if (!token)
+		return (0);
+	while (token != NULL)
+	{
+		if (token->type == INFILE)
+			return (INFILE);
+		else if (token->type == OUTFILE)
+			return (OUTFILE);
+		else if (token->type == HEREDOC)
+			return (HEREDOC);
+		else if (token->type == APPEND)
+			return (APPEND);
+		token = token->next;
+	}
+	return (0);
+}
+
+int	priority_pipe(t_token *token)
+{
+	if (!token)
+		return (0);
+	while (token != NULL)
+	{
+		if (token->type == PIPE)
+			return (PIPE);
+		token = token->next;
+	}
+	return (0);
+}
+
+int	priority_or_and(t_token *token)
+{
+	if (!token)
+		return (0);
+	while (token != NULL)
+	{
+		if (token->type == OR)
+			return (OR);
+		else if (token->type == AND)
+			return (AND);
+		token = token->next;
+	}
+	return (0);
+}
+
 t_ast	*lstadd_back_ast(t_ast *first)
 {
 	t_ast	*last;
-	// t_ast	*curseur;
 
+	// t_ast	*curseur;
 	last = malloc(sizeof(t_ast));
 	if (!last)
 		return (NULL);
-	
+	first = last;
 	return (first);
 }
 
-t_ast	*priority_operator(t_ast *ast, t_token *token)
+int	priority_operator(t_ast *ast, t_token *token)
 {
-	(void) token;
+	t_token	*tmp;
+
+	tmp = token;
+	if (priority_redi(tmp) != 0)
+		return (ast->type = priority_redi(tmp));
+	else if (priority_pipe(tmp) != 0)
+		return (ast->type = priority_pipe(tmp));
+	else if (priority_or_and(tmp) != 0)
+		return (ast->type = priority_or_and(tmp));
+	else
+		return (ast->type = WORD);
+	tmp = tmp->next;
+	return (ast->type);
+}
+
+t_ast	*recursive_ast(t_ast *ast, t_token *token)
+{
 	ast = lstadd_back_ast(ast);
+	ast->type = priority_operator(ast, token);
 	return (ast);
 }
 
@@ -197,11 +261,11 @@ int	parser(t_token *token)
 		ft_printf(2, "PRINTF TESTER : syntax error near unexpected token\n");
 		return (ERROR_SYNTAX_STATUS);
 	}
-	ast = priority_operator(ast, token);
+	ast = recursive_ast(ast, token);
 	if (ast)
 	{
 		printf("ast existe\n");
-		printf("%s\n", ast->left->argv[0]);
+		printf("NUMBER AST : [%d]\n", ast->type);
 	}
 	else
 		printf("ast n'existe pas");
