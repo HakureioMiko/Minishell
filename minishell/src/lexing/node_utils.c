@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 11:35:46 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/12 23:09:42 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/16 14:33:06 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,44 +48,30 @@ void	ft_miniclear(t_token **lst)
 
 void	printmini(t_token **mini)
 {
-	int	i;
+	t_token		*cursor;
+	t_sub_token	*sub_cursor;
+	t_sub_token	*sub_next;
+	t_token		*next;
+	int			i;
 
-	i = 1;
-	if (!*mini)
-	{
-		printf("error\n");
+	if (!mini || !*mini)
 		return ;
-	}
-	while ((*mini)->next != NULL)
+	cursor = *mini;
+	i = 0;
+	while (cursor)
 	{
-		printf("token %d [%d]\n", i, (*mini)->type);
-		if ((*mini)->sub_token->var)
+		printf("token %d [%d]\n", i, cursor->type);
+		sub_cursor = cursor->sub_token;
+		while (sub_cursor)
 		{
-			while ((*mini)->sub_token->next != NULL)
-			{
-				printf("	sub_token : [%s]\n", (*mini)->sub_token->var);
-				printf("	quote : [%d]\n", (*mini)->sub_token->quote);
-				(*mini)->sub_token = (*mini)->sub_token->next;
-			}
+			sub_next = sub_cursor->next;
+			printf("	sub_token : [%s]\n", sub_cursor->var);
+			printf("	quote : [%d]\n", sub_cursor->quote);
+			sub_cursor = sub_next;
 		}
-		if ((*mini)->sub_token->var)
-		{
-			printf("	sub_token : [%s]\n", (*mini)->sub_token->var);
-			printf("	quote : [%d]\n", (*mini)->sub_token->quote);
-			*mini = (*mini)->next;
-		}
-		i ++;
-	}
-	printf("token %d [%d]\n", i, (*mini)->type);
-	while ((*mini)->sub_token->next != NULL)
-	{
-		printf("	sub_token : [%s]\n", (*mini)->sub_token->var);
-		printf("	quote : [%d]\n", (*mini)->sub_token->quote);
-		(*mini)->sub_token = (*mini)->sub_token->next;
-	}
-	if ((*mini)->sub_token->var)
-	{
-		printf("	sub_token : [%s]\n", (*mini)->sub_token->var);
-		printf("	quote : [%d]\n", (*mini)->sub_token->quote);
+		next = cursor->next;
+		cursor = next;
+		i++;
 	}
 }
+

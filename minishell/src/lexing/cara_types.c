@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 11:11:16 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/12 22:23:30 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/13 15:19:35 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,24 @@ void	meta_cara(char **buffer, char cara, t_token **mini_vars, t_state *state)
 	{
 		if (!(*mini_vars))
 			lstadd_back(addnode(WORD), mini_vars, state);
+		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars, state);
+		free(*buffer);
+		*buffer = NULL;
+		*buffer = add_char(*buffer, cara);
+	}
+	else if (*buffer && (*buffer[0] == '&' && cara == '|'))
+	{
+		if (!(*mini_vars))
+			lstadd_back(addnode(WORD), mini_vars, state);
+		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars, state);
+		free(*buffer);
+		*buffer = NULL;
+		*buffer = add_char(*buffer, cara);
+	}
+	else if (*buffer && (*buffer[0] == '|' && cara == '&'))
+	{
+		if (!(*mini_vars))
+			lstadd_back(addnode(PIPE), mini_vars, state);
 		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars, state);
 		free(*buffer);
 		*buffer = NULL;
