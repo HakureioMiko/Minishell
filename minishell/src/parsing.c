@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/14 16:41:35 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/16 13:28:21 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,15 +317,18 @@ t_ast	*parse_cmd(t_token **token)
 {
 	t_ast	*node;
 
-	node = ast_node(AST_WORD);
-	while (*token && (*token)->type == WORD)
+	if (*token && (*token)->type == WORD)
 	{
+		node = ast_node(AST_WORD);
 		node->cmd_token = *token;
-		*token = (*token)->next;
 	}
+	while (*token && (*token)->type == WORD)
+		*token = (*token)->next;
 	while (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
 	{
-		// redirection
+		node->redirs->type = (*token)->type;
+		*token = (*token)->next;
+		node->redirs->target = (*token);
 		*token = (*token)->next;
 	}
 	return (node);
@@ -389,6 +392,14 @@ void	printleft(t_ast *ast)
 	while (ast != NULL)
 	{
 		printf("AST LEFT VALUE : %u\n", ast->type);
+		if (ast->cmd_token)
+		{
+			while (ast->cmd_token->next != NULL && ast->cmd_token->type == WORD)
+			{
+				printf("AST LEFT CONTENT : %s\n", ast->cmd_token->sub_token->var);
+				ast->cmd_token = ast->cmd_token->next;
+			}
+		}
 		// while (ast->cmd_token->sub_token->next != NULL)
 		// {
 		// 	printf("AST LEFT TOKEN VALUE : %s \n", ast->cmd_token->sub_token->var);
@@ -406,6 +417,8 @@ void	printright(t_ast *ast)
 	while (ast != NULL)
 	{
 		printf("AST RIGHT VALUE : %u\n", ast->type);
+		if (ast->cmd_token)
+			printf("AST RIGHT CONTENT : %s\n", ast->cmd_token->sub_token->var);
 		// while (ast->cmd_token->sub_token->next != NULL)
 		// {
 		// 	printf("AST RIGHT TOKEN VALUE : %s \n", ast->cmd_token->sub_token->var);
