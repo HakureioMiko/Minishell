@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/16 15:11:44 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/17 11:43:32 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -324,7 +324,8 @@ t_ast	*parse_cmd(t_token **token)
 	}
 	while (*token && (*token)->type == WORD)
 		*token = (*token)->next;
-	while (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
+	while (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE
+			|| (*token)->type == APPEND || (*token)->type == HEREDOC))
 	{
 		node->redirs = malloc(sizeof(t_redir));
 		node->redirs->type = (*token)->type;
@@ -385,50 +386,53 @@ t_ast	*parse_or(t_token **token)
 	return (left);
 }
 
-void	printright(t_ast *ast);
+// void	printright(t_ast *ast);
 
-void	printleft(t_ast *ast)
-{
-	while (ast != NULL)
-	{
-		printf("AST LEFT VALUE : %u\n", ast->type);
-		if (ast->cmd_token)
-		{
-			while (ast->cmd_token->next != NULL && ast->cmd_token->type == WORD)
-			{
-				printf("AST LEFT CONTENT : %s\n", ast->cmd_token->sub_token->var);
-				if (ast->redirs)
-				{
-					printf("REDIR VALUE : %u\n", ast->redirs->type);
-					printf("REDIR CONTENT : %s\n", ast->redirs->target->sub_token->var);
-				}
-				ast->cmd_token = ast->cmd_token->next;
-			}
-		}
-		if (ast->right)
-			printright(ast);
-		ast = ast->left;
-	}
-	printf("\n");
-}
+// void	printleft(t_ast *ast)
+// {
+// 	while (ast != NULL)
+// 	{
+// 		printf("AST LEFT VALUE : %u\n", ast->type);
+// 		if (ast->cmd_token)
+// 		{
+// 			while (ast->cmd_token->next != NULL && ast->cmd_token->type == WORD)
+// 			{
+// 				printf("AST LEFT CONTENT : %s\n",
+					// ast->cmd_token->sub_token->var);
+// 				if (ast->redirs)
+// 				{
+// 					printf("REDIR VALUE : %u\n", ast->redirs->type);
+// 					printf("REDIR CONTENT : %s\n",
+						// ast->redirs->target->sub_token->var);
+// 				}
+// 				ast->cmd_token = ast->cmd_token->next;
+// 			}
+// 		}
+// 		if (ast->right)
+// 			printright(ast);
+// 		ast = ast->left;
+// 	}
+// 	printf("\n");
+// }
 
-void	printright(t_ast *ast)
-{
-	while (ast != NULL)
-	{
-		printf("AST RIGHT VALUE : %u\n", ast->type);
-		if (ast->cmd_token)
-			printf("AST RIGHT CONTENT : %s\n", ast->cmd_token->sub_token->var);
-		// while (ast->cmd_token->sub_token->next != NULL)
-		// {
-		// 	printf("AST RIGHT TOKEN VALUE : %s \n", ast->cmd_token->sub_token->var);
-		// 	ast->cmd_token->sub_token = ast->cmd_token->sub_token->next;
-		// }
-		ast = ast->right;
-	}
-}
+// void	printright(t_ast *ast)
+// {
+// 	while (ast != NULL)
+// 	{
+// 		printf("AST RIGHT VALUE : %u\n", ast->type);
+// 		if (ast->cmd_token)
+// 			printf("AST RIGHT CONTENT : %s\n", ast->cmd_token->sub_token->var);
+// 		// while (ast->cmd_token->sub_token->next != NULL)
+// 		// {
+// 		// 	printf("AST RIGHT TOKEN VALUE : %s \n",
+				// ast->cmd_token->sub_token->var);
+// 		// 	ast->cmd_token->sub_token = ast->cmd_token->sub_token->next;
+// 		// }
+// 		ast = ast->right;
+// 	}
+// }
 
-int	parser(t_token *token)
+int	parser(t_token *token, t_env *env)
 {
 	t_ast	*ast;
 
@@ -439,7 +443,8 @@ int	parser(t_token *token)
 		return (ERROR_SYNTAX_STATUS);
 	}
 	ast = parse_or(&token);
-	printleft(ast);
-	printright(ast);
+	// printleft(ast);
+	// printright(ast);
+	expand_function(ast, env);
 	return (0);
 }

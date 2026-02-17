@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/13 16:55:53 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/17 11:19:15 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,6 @@ typedef struct s_ast
 	t_redir			*redirs;
 }					t_ast;
 
-int					parser(t_token *token);
+int					parser(t_token *token, t_env *env);
 
 #endif
