@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/17 15:15:41 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/17 21:35:20 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,19 +58,30 @@ t_ast	*parse_cmd(t_token **token)
 		else
 			ft_printf(2, "PRINTF TESTERrrr : syntax error near unexpected token\n");
 	}
-	if (*token && (*token)->type == WORD)
+	if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
 	{
 		node = ast_node(AST_CMD);
-		node->cmd_token = *token;
-	}
-	while (*token && (*token)->type == WORD)
-		*token = (*token)->next;
-	while (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
-	{
 		node->redirs = malloc(sizeof(t_redir));
 		node->redirs->type = (*token)->type;
 		*token = (*token)->next;
 		node->redirs->target = (*token);
+		node->cmd_token = *token;
+	}
+	else if (*token && (*token)->type == WORD)
+	{
+		node = ast_node(AST_CMD);
+		node->cmd_token = *token;
+	}
+	while (*token && (*token)->type < 5)
+	{
+		if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
+		{
+			node->redirs = malloc(sizeof(t_redir));
+			node->redirs->type = (*token)->type;
+			*token = (*token)->next;
+			node->redirs->target = (*token);
+		}
+		*token = (*token)->next;
 	}
 	return (node);
 }
@@ -136,14 +147,14 @@ void	print_ast(t_ast *ast)
 		printf("%u\n", ast->type);
 		if (ast->cmd_token)
 		{
-			while (ast->cmd_token && ast->cmd_token->type == WORD)
+			while (ast->cmd_token && ast->cmd_token->type < 5)
 			{
 				printf("AST CONTENT : %s\n", ast->cmd_token->sub_token->var);
-				/* if (ast->redirs)
+				if (ast->redirs)
 				{
 					printf("REDIR VALUE : %u\n", ast->redirs->type);
 					printf("REDIR CONTENT : %s\n", ast->redirs->target->sub_token->var);
-				} */
+				}
 				if (ast->cmd_token->next)
 					ast->cmd_token = ast->cmd_token->next;
 				else
@@ -179,11 +190,11 @@ int	parser(t_token *token)
 	t_ast	*ast;
 
 	ast = NULL;
-	//if (check_token(token) == 1)
-	//{
-	//	ft_printf(2, "PRINTF TESTER : syntax error near unexpected token\n");
-	//	return (2);
-	//}
+	if (check_token(token) == 1)
+	{
+		ft_printf(2, "PRINTF TESTER : syntax error near unexpected token\n");
+		return (2);
+	}
 	ast = parse_or(&token);
 	print_ast(ast);
 	return (0);
