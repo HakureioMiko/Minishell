@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:33 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/17 14:03:51 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/18 11:38:37 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ typedef struct s_redir
 {
 	t_token_type	type;
 	t_token			*target;
-	struct s_red	*next;
+	struct s_redir	*next;
 }					t_redir;
 
 typedef struct s_ast
@@ -88,6 +88,7 @@ typedef struct s_ast
 
 	t_token			*cmd_token;
 	t_redir			*redirs;
+	char 			**cmd;
 }					t_ast;
 
 

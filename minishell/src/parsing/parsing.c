@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/17 21:35:20 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/18 11:54:45 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,21 @@ t_ast	*ast_node(int type)
 	return (node);
 }
 
+void	token_list_redir(t_token **token, t_ast *node)
+{
+	t_token	*prev;
+	t_token	*next;
+
+	if ((*token)->prev)
+		prev = (*token)->prev;
+	node->redirs = malloc(sizeof(t_redir));
+	node->redirs->type = (*token)->type;
+	if ((*token)->next)
+		next = (*token)->next;
+	*token = (*token)->next;
+	node->redirs->target = (*token);
+}
+
 t_ast	*parse_cmd(t_token **token)
 {
 	t_ast	*node;
@@ -61,10 +76,7 @@ t_ast	*parse_cmd(t_token **token)
 	if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
 	{
 		node = ast_node(AST_CMD);
-		node->redirs = malloc(sizeof(t_redir));
-		node->redirs->type = (*token)->type;
-		*token = (*token)->next;
-		node->redirs->target = (*token);
+		token_list_redir(token, node);
 		node->cmd_token = *token;
 	}
 	else if (*token && (*token)->type == WORD)
@@ -76,10 +88,7 @@ t_ast	*parse_cmd(t_token **token)
 	{
 		if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
 		{
-			node->redirs = malloc(sizeof(t_redir));
-			node->redirs->type = (*token)->type;
-			*token = (*token)->next;
-			node->redirs->target = (*token);
+			token_list_redir(token, node);
 		}
 		*token = (*token)->next;
 	}
