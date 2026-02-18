@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/17 17:17:15 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/18 14:00:59 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ bool	check_if_expendable(char *ast)
 	i = 0;
 	while (ast[i])
 	{
-		if (ast[i] == '$')
+		if (ast[i] == '$' && ast[i + 1] >= 33 && ast[i + 1] <= 126)
 			return (true);
 		i++;
 	}
@@ -106,13 +106,12 @@ char	*app_expend(char *ast, t_env *env)
 	}
 }
 
+// changer a partir de a ne pas changer var mais mettre dans un tableau
+
 t_ast	*call_expand(t_ast *ast, t_env *env)
 {
 	while (ast->cmd_token != NULL)
 	{
-		if (ast->cmd_token->sub_token->quote != SINGLE)
-			ast->cmd_token->sub_token->var = app_expend(ast->cmd_token->sub_token->var,
-					env);
 		ast->cmd_token = ast->cmd_token->next;
 	}
 	return (ast);
@@ -140,9 +139,7 @@ t_ast	*expand_function(t_ast *ast, t_env *env)
 	curseurl = ast;
 	curseurr = ast;
 	expand_left(curseurl, env);
-	if (curseurr->type != AST_WORD)
-	{
-		if (curseurr->left && check_if_word(curseurr) == true)
-	}
+	// if (curseurr->type != AST_WORD)
+	// 	if (curseurr->left && check_if_word(curseurr) == true)
 	return (ast);
 }
