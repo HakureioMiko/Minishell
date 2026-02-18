@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:33 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/18 11:38:37 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/18 16:56:55 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ typedef struct s_ast
 
 
 //PARSING.C
-int				parser(t_token *token);
+int				parser(t_token **token);
 t_ast			*parse_or(t_token **token);
 
 //CHECK_TOKEN.C

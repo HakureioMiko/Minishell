@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/17 18:50:16 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/18 17:13:33 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ int	main(int ac, char **av, char **envp)
 		if (line)
 		{
 			mini_vars = lexing(&mini_vars, line);
-			parser(mini_vars);
+			printmini(&mini_vars);
+			parser(&mini_vars);
 		}
 		//if (*line)
 		//	add_history(line);

@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/18 14:27:55 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/18 17:15:51 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,35 @@ void	token_list_redir(t_token **token, t_ast *node)
 {
 	t_token	*prev;
 	t_token	*next;
+	t_token	*redir;
+	t_token	*file;
 
 	if ((*token)->prev)
 		prev = (*token)->prev;
+	else
+		prev = NULL;
 	node->redirs = malloc(sizeof(t_redir));
 	node->redirs->type = (*token)->type;
+	file = (*token)->next;
+	redir = (*token);
+	*token = (*token)->next;
 	if ((*token)->next)
 		next = (*token)->next;
-	*token = (*token)->next;
-	node->redirs->target = (*token);
+	else 
+		next = NULL;
+	redir->next = NULL;
+	redir->prev = NULL;
+	ft_minidelone(redir->sub_token);
+	free(redir);
+	file->prev = NULL;
+	file->next = NULL;
+	node->redirs->target = file; 
+	if (prev)
+		prev->next = next;
+	if (next)
+		next->prev = prev;
+	if (next)
+		(*token) = next;
 }
 
 t_ast	*parse_cmd(t_token **token)
@@ -148,8 +168,6 @@ t_ast	*parse_or(t_token **token)
 	return (left);
 }
 
-void	printright(t_ast *ast);
-
 void	print_ast(t_ast *ast)
 {
 	if (ast != NULL)
@@ -160,15 +178,15 @@ void	print_ast(t_ast *ast)
 			while (ast->cmd_token && ast->cmd_token->type < 5)
 			{
 				printf("AST CONTENT : %s\n", ast->cmd_token->sub_token->var);
-				if (ast->redirs)
-				{
-					printf("REDIR VALUE : %u\n", ast->redirs->type);
-					printf("REDIR CONTENT : %s\n", ast->redirs->target->sub_token->var);
-				}
 				if (ast->cmd_token->next)
 					ast->cmd_token = ast->cmd_token->next;
 				else
 					break ;
+			}
+			if (ast->redirs)
+			{
+				printf("REDIR VALUE : %u\n", ast->redirs->type);
+				printf("REDIR CONTENT : %s\n", ast->redirs->target->sub_token->var);
 			}
 		}
 	}
@@ -179,33 +197,17 @@ void	print_ast(t_ast *ast)
 	printf("\n");
 }
 
-void	printright(t_ast *ast)
-{
-	while (ast != NULL)
-	{
-		printf("AST RIGHT VALUE : %u\n", ast->type);
-		if (ast->cmd_token)
-			printf("AST RIGHT CONTENT : %s\n", ast->cmd_token->sub_token->var);
-		// while (ast->cmd_token->sub_token->next != NULL)
-		// {
-		// 	printf("AST RIGHT TOKEN VALUE : %s \n", ast->cmd_token->sub_token->var);
-		// 	ast->cmd_token->sub_token = ast->cmd_token->sub_token->next;
-		// }
-		ast = ast->right;
-	}
-}
-
-int	parser(t_token *token)
+int	parser(t_token **token)
 {
 	t_ast	*ast;
 
 	ast = NULL;
-	if (check_token(token) == 1)
+	if (check_token((*token)) == 1)
 	{
 		ft_printf(2, "PRINTF TESTER : syntax error near unexpected token\n");
 		return (2);
 	}
-	ast = parse_or(&token);
+	ast = parse_or(token);
 	print_ast(ast);
 	return (0);
 }
