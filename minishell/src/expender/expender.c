@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/18 18:14:40 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/18 18:19:28 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,8 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 		current_sub = current_token->sub_token;
 		while (current_sub != NULL)
 		{
-			current_sub->var = app_expend(current_sub->var, env);
+			if (current_sub->quote != SINGLE)
+				current_sub->var = app_expend(current_sub->var, env);
 			current_sub = current_sub->next;
 		}
 		current_token = current_token->next;
