@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/18 11:54:45 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/18 17:56:38 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "../minishell.h"
 
 t_token	*lstfirst_token(t_token *lst)
 {
@@ -194,7 +194,7 @@ void	printright(t_ast *ast)
 	}
 }
 
-int	parser(t_token *token)
+int	parser(t_token *token, t_env *env)
 {
 	t_ast	*ast;
 
@@ -205,6 +205,7 @@ int	parser(t_token *token)
 		return (2);
 	}
 	ast = parse_or(&token);
+	ast = expand_function(ast, env);
 	print_ast(ast);
 	return (0);
 }

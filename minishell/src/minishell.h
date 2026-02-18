@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/17 11:25:35 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/18 17:47:58 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -65,5 +64,7 @@
 // getcwd() chdir() isatty() ttyname() ttyslot()
 
 // ARBRE SYNTAXIQUE
+
+t_ast	*expand_function(t_ast *ast, t_env *env);
 
 #endif

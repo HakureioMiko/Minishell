@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/18 14:20:24 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/18 18:14:40 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ bool	check_path2(char *ast, t_env *env)
 				return (false);
 			i++;
 		}
-		env == env->next;
+		env = env->next;
 	}
 	return (true);
 }
@@ -100,46 +100,58 @@ char	*app_expend(char *ast, t_env *env)
 	if (check_if_expendable(ast) == 0)
 		return (ast);
 	else if (check_path(ast, env) == 0)
-		return (NULL);
+	{
+		ast = ft_strdup(NULL);
+		return (ast);
+	}
 	else
 	{
+		ast = ft_strdup("TEST2");
+		return (ast);
 	}
+	return (ast);
 }
 
 // changer a partir de a ne pas changer var mais mettre dans un tableau
 
 t_ast	*call_expand(t_ast *ast, t_env *env)
 {
-	while (ast->cmd_token != NULL && ast->cmd_token->type == WORD)
+	t_token		*current_token;
+	t_sub_token	*current_sub;
+
+	current_token = ast->cmd_token;
+	while (current_token != NULL && current_token->type == WORD)
 	{
-		ast->cmd_token = ast->cmd_token->next;
+		current_sub = current_token->sub_token;
+		while (current_sub != NULL)
+		{
+			current_sub->var = app_expend(current_sub->var, env);
+			current_sub = current_sub->next;
+		}
+		current_token = current_token->next;
 	}
 	return (ast);
 }
 
-t_ast	*expand_left(t_ast *curseurl, t_env *env)
+t_ast	*expand_ast_checker(t_ast *curseur, t_env *env)
 {
-	while (curseurl->type != AST_CMD)
-	{
-		curseurl = curseurl->left;
-		if (check_if_word(curseurl) == 1)
-			call_expand(curseurl, env);
-		else
-			expand_left(curseurl->right, env);
-		if (check_if_word(curseurl) == 1)
-			call_expand(curseurl, env);
-	}
+	if (!curseur)
+		return (NULL);
+	if (check_if_word(curseur) == 1)
+		call_expand(curseur, env);
+	if (curseur->left)
+		expand_ast_checker(curseur->left, env);
+	if (curseur->right)
+		expand_ast_checker(curseur->right, env);
+	return (curseur);
 }
 
 t_ast	*expand_function(t_ast *ast, t_env *env)
 {
-	t_ast	*curseurl;
-	t_ast	*curseurr;
+	t_ast	*curseur;
 
-	curseurl = ast;
-	curseurr = ast;
-	expand_left(curseurl, env);
-	// if (curseurr->type != AST_WORD)
-	// 	if (curseurr->left && check_if_word(curseurr) == true)
+	(void)env;
+	curseur = ast;
+	ast = expand_ast_checker(curseur, env);
 	return (ast);
 }

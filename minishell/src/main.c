@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/17 18:50:16 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/18 16:57:08 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ int	main(int ac, char **av, char **envp)
 {
 	char	*line;
 	t_token	*mini_vars;
-	//t_env	*env;
+	t_env	*env;
 
 	(void)av;
 	(void)ac;
 	(void)envp;
 	mini_vars = NULL;
-	//env = NULL;
+	env = NULL;
 	//env = env_content(env, envp);
 	/*AFFICHAGE D'ENV
 	while (env->next != NULL)
@@ -52,7 +52,7 @@ int	main(int ac, char **av, char **envp)
 		if (line)
 		{
 			mini_vars = lexing(&mini_vars, line);
-			parser(mini_vars);
+			parser(mini_vars, env);
 		}
 		//if (*line)
 		//	add_history(line);

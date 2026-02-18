@@ -3,32 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:33 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/18 11:38:37 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/18 17:45:33 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
-// Unicode Color
-// Usage > printf("%s Hello World %s", COLOR, RESET);
-# define BLACK "\033[30m"
-# define RED "\033[31m"
-# define GREEN "\033[32m"
-# define YELLOW "\033[33m"
-# define BLUE "\033[34m"
-# define MAGENTA "\033[35m"
-# define CYAN "\033[36m"
-# define WHITE "\033[37m"
-# define RESET "\033[0m"
-
 # include "../libft/libft.h"
 # include "../lexing/lexer.h"
 # include <readline/history.h>
 # include <readline/readline.h>
+# include "../minishell.h"
+
 // readline rl_clear_history, rl_on_new_line,
 // rl_replace_line, rl_redisplay add_history
 
@@ -93,7 +83,7 @@ typedef struct s_ast
 
 
 //PARSING.C
-int				parser(t_token *token);
+int				parser(t_token *token, t_env *env);
 t_ast			*parse_or(t_token **token);
 
 //CHECK_TOKEN.C
