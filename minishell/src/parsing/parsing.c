@@ -6,14 +6,14 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/18 17:15:51 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/19 16:12:36 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "parser.h"
 
-t_token	*lstfirst_token(t_token *lst)
+/* t_token	*lstfirst_token(t_token *lst)
 {
 	t_token	*cursor;
 
@@ -23,7 +23,7 @@ t_token	*lstfirst_token(t_token *lst)
 	while (cursor->sub_token->prev != NULL)
 		cursor->sub_token = cursor->sub_token->prev;
 	return (cursor);
-}
+} */
 
 // Creation de node
 t_ast	*ast_node(int type)
@@ -41,6 +41,30 @@ t_ast	*ast_node(int type)
 	return (node);
 }
 
+void	redir_node(t_redir **redir, t_token **token)
+{
+	t_redir	*node;
+	t_token	*file;
+
+	node = malloc(sizeof(t_redir));
+	if (!node)
+		return ;
+	node->type = (*token)->type;
+	file = (*token)->next;
+	node->target = file;
+	node->next = NULL;
+	if (!redir || !(*redir))
+	{
+		(*redir) = node;
+		return;
+	}
+	while ((*redir)->next != NULL)
+	{
+		(*redir) = (*redir)->next;
+	}
+	(*redir)->next = node;
+}
+
 void	token_list_redir(t_token **token, t_ast *node)
 {
 	t_token	*prev;
@@ -52,8 +76,8 @@ void	token_list_redir(t_token **token, t_ast *node)
 		prev = (*token)->prev;
 	else
 		prev = NULL;
-	node->redirs = malloc(sizeof(t_redir));
-	node->redirs->type = (*token)->type;
+	redir_node(&node->redirs, token);;
+	//node->redirs->type = (*token)->type;
 	file = (*token)->next;
 	redir = (*token);
 	*token = (*token)->next;
@@ -67,7 +91,7 @@ void	token_list_redir(t_token **token, t_ast *node)
 	free(redir);
 	file->prev = NULL;
 	file->next = NULL;
-	node->redirs->target = file; 
+	//node->redirs->target = file; 
 	if (prev)
 		prev->next = next;
 	if (next)
@@ -111,7 +135,8 @@ t_ast	*parse_cmd(t_token **token)
 		{
 			token_list_redir(token, node);
 		}
-		*token = (*token)->next;
+		else
+			*token = (*token)->next;
 	}
 	return (node);
 }
@@ -183,10 +208,14 @@ void	print_ast(t_ast *ast)
 				else
 					break ;
 			}
-			if (ast->redirs)
+			while (ast->redirs)
 			{
 				printf("REDIR VALUE : %u\n", ast->redirs->type);
 				printf("REDIR CONTENT : %s\n", ast->redirs->target->sub_token->var);
+				if (ast->redirs->next)
+					ast->redirs = ast->redirs->next;
+				else
+					break ;
 			}
 		}
 	}
