@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/18 18:19:28 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/19 14:27:56 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,76 @@ bool	check_if_expendable(char *ast)
 	return (false);
 }
 
-bool	check_path2(char *ast, t_env *env)
+// bool	check_path2(char *ast, t_env *env)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (env != NULL)
+// 	{
+// 		i = 0;
+// 		while (env->key[i] == ast[i])
+// 		{
+// 			i++;
+// 			printf("key : %c\nast : %c\n", env->key[i], ast[i]);
+// 			if (ast[i] == '\0')
+// 				return (true);
+// 		}
+// 		env = env->next;
+// 	}
+// 	return (false);
+// }
+
+// bool	check_path(char *ast, t_env *env)
+// {
+// 	char	*str;
+// 	int		i;
+// 	int		j;
+
+// 	i = 0;
+// 	j = 0;
+// 	// str = ft_calloc(1, (ft_strlen(ast) + 1));
+// 	str = malloc(sizeof(char) * (ft_strlen(ast) + 1));
+// 	if (!str)
+// 		return (NULL);
+// 	while (ast[i])
+// 	{
+// 		if (ast[i] == '$')
+// 		{
+// 			i++;
+// 			while (ast[i])
+// 			{
+// 				str[j] = str[i];
+// 				i++;
+// 				j++;
+// 			}
+// 		}
+// 		i++;
+// 	}
+// 		printf("ast value : %s\n", ast);
+// 	printf("str value : %s\n", str);
+// 	i = check_path2(ast, env);
+// 	return (free(str), i);
+// // }
+
+// char	*app_expend(char *ast, t_env *env)
+// {
+// 	if (check_if_expendable(ast) == 0)
+// 		return (ast);
+// 	else if (check_path(ast, env) == 0)
+// 	{
+// 		ast = ft_strdup("TEST1");
+// 		return (ast);
+// 	}
+// 	else
+// 	{
+// 		ast = ft_strdup("TEST2");
+// 		return (ast);
+// 	}
+// 	return (ast);
+// }
+
+bool	check_path2(char *str, t_env *env)
 {
 	int	i;
 
@@ -56,41 +125,35 @@ bool	check_path2(char *ast, t_env *env)
 	while (env != NULL)
 	{
 		i = 0;
-		while (env->key[i] == ast[i])
-		{
-			if (ast[i] == '\0')
-				return (false);
-			i++;
-		}
+		if (ft_strncmp(env->key, str, -1) == 0)
+			return (true);
 		env = env->next;
 	}
-	return (true);
+	return (false);
 }
 
 bool	check_path(char *ast, t_env *env)
 {
 	char	*str;
 	int		i;
-	int		j;
 
-	i = 0;
-	j = 0;
-	str = ft_calloc(1, (ft_strlen(ast) + 1));
-	if (!str)
+	if (env == NULL || ast == NULL)
 		return (NULL);
+	i = 0;
 	while (ast[i])
 	{
 		if (ast[i] == '$')
 		{
 			i++;
-			while (ast[i])
-			{
-				str[j] = str[i];
-				i++;
-			}
+			str = ft_substr(ast, i, -1);
+			if (!str)
+				return (NULL);
+			printf("str malloc: %s\n", str);
 		}
 		i++;
 	}
+	printf("ast value : %s\n", ast);
+	printf("str value : %s\n", str);
 	i = check_path2(str, env);
 	return (free(str), i);
 }
@@ -101,12 +164,14 @@ char	*app_expend(char *ast, t_env *env)
 		return (ast);
 	else if (check_path(ast, env) == 0)
 	{
-		ast = ft_strdup(NULL);
+		ast = ft_strdup("PAS TROUVE");
+		// donc envoye vide
 		return (ast);
 	}
 	else
 	{
-		ast = ft_strdup("TEST2");
+		ast = ft_strdup("TROUVE");
+		// faire un if double ou normal
 		return (ast);
 	}
 	return (ast);
