@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/20 17:03:49 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/20 17:26:52 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,26 +41,26 @@ bool	check_if_expendable(char *ast)
 	i = 0;
 	while (ast[i])
 	{
-		if (ast[i] == '$' && ast[i + 1] >= 33 && ast[i + 1] <= 126)
+		if (ast[i] == '$')
 			return (true);
 		i++;
 	}
 	return (false);
 }
 
-int	len_dollars(char *ast)
-{
-	int	i;
+// int	len_dollars(char *ast)
+// {
+// 	int	i;
 
-	i = 0;
-	while (ast[i])
-	{
-		if (ast[i] == ' ')
-			return (i);
-		i++;
-	}
-	return (i);
-}
+// 	i = 0;
+// 	while (ast[i])
+// 	{
+// 		if (ast[i] == ' ' || ast[i] == '$')
+// 			return (i);
+// 		i++;
+// 	}
+// 	return (i);
+// }
 
 
 char	*check_string(char *str, t_env *env)
@@ -89,7 +89,7 @@ char	*check_key(char *str)
 	char	*key;
 
 	i = 0;
-	while (str[i] != ' ' && str[i])
+	while ((str[i] != ' ' && str[i]) || (str[i] != '$' && str[i]))
 		i++;
 	key = malloc(sizeof(char) * (i + 1));
 	if (!key)
@@ -133,12 +133,9 @@ char	*check_new_string(char *str, char *key, char *env)
 				k++;
 			}
 		}
-		else
-		{
-			new_string[k] = str[i];
-			i++;
-			k++;
-		}
+		new_string[k] = str[i];
+		i++;
+		k++;
 	}
 	new_string[k] = '\0';
 	free(str);
