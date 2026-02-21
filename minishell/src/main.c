@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/19 11:42:07 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/21 15:44:33 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,10 @@ int	main(int ac, char **av, char **envp)
 	char	*line;
 	t_token	*mini_vars;
 	t_env	*env;
+	// int		tty;
 
+	// tty = isatty(STDIN_FILENO);
+	// printf("test tty %d\n", tty);
 	(void)av;
 	(void)ac;
 	(void)envp;
