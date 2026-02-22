@@ -63,85 +63,84 @@ bool	check_if_expendable(char *str)
 // }
 
 
-// char	*check_string(char *str, t_env *env)
-// {
-// 	char	*str_env;
+char	*check_string(char *str, t_env *env)
+{
+	char	*str_env;
 
-// 	if (!str)
-// 		return (NULL);
-// 	str_env = NULL;
-// 	while (env != NULL)
-// 	{
-// 		if (ft_strncmp(env->key, str, -1) == 0)
-// 		{
-// 			str_env = ft_strdup(env->content);
-// 			printf("ENV->CONTENT : %s\n", str_env);
-// 			break ;
-// 		}
-// 		env = env->next;
-// 	}
-// 	return (str_env);
-// }
+	if (!str)
+		return (NULL);
+	str_env = NULL;
+	while (env != NULL)
+	{
+		if (ft_strncmp(env->key, str, -1) == 0)
+		{
+			str_env = ft_strdup(env->content);
+			printf("ENV->CONTENT : %s\n", str_env);
+			break ;
+		}
+		env = env->next;
+	}
+	return (str_env);
+}
 
-// char	*check_key(char *str)
-// {
-// 	int		i;
-// 	char	*key;
+char	*check_key(char *str)
+{
+	int		i;
+	char	*key;
 
-// 	i = 0;
-// 	while ((str[i] != ' ' && str[i]) || (str[i] != '$' && str[i]))
-// 		i++;
-// 	key = malloc(sizeof(char) * (i + 1));
-// 	if (!key)
-// 		return (NULL);
-// 	i = 0;
-// 	while (str[i] != ' ' && str[i])
-// 	{
-// 		key[i] = str[i];
-// 		i++;
-// 	}
-// 	key[i] = '\0';
-// 	printf("KEY->CONTENT : %s\n", key);
-// 	return (key);
-// }
+	i = 0;
+	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i]))
+		i++;
+	key = malloc(sizeof(char) * (i + 1));
+	if (!key)
+		return (NULL);
+	i = 0;
+	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i]))
+	{
+		key[i] = str[i];
+		i++;
+	}
+	key[i] = '\0';
+	return (key);
+}
 
-// char	*check_new_string(char *str, char *key, char *env)
-// {
-// 	int		i;
-// 	int		j;
-// 	int		k;
-// 	int		len;
-// 	char	*new_string;
+char	*check_new_string(char *str, char *key, char *env)
+{
+	int		i;
+	int		j;
+	int		k;
+	int		len;
+	char	*new_string;
 
-// 	i = 0;
-// 	k = 0;
-// 	len = ft_strlen(str) + ft_strlen(env) - ft_strlen(key) - 1;
-// 	new_string = malloc(sizeof(char) * (len + 1));
-// 	if (!new_string)
-// 		return (NULL);
-// 	while (str[i])
-// 	{
-// 		if (str[i] == '$')
-// 		{
-// 			i++;
-// 			i += ft_strlen(key);
-// 			j = 0;
-// 			while (env[j])
-// 			{
-// 				new_string[k] = env[j];
-// 				j++;
-// 				k++;
-// 			}
-// 		}
-// 		new_string[k] = str[i];
-// 		i++;
-// 		k++;
-// 	}
-// 	new_string[k] = '\0';
-// 	free(str);
-// 	printf("NEW_STRING VALUE : %s\n", new_string);
-// 	return (new_string);
-// }
+	i = 0;
+	k = 0;
+	len = ft_strlen(str) + ft_strlen(env) - ft_strlen(key) - 1;
+	new_string = malloc(sizeof(char) * (len + 1));
+	if (!new_string)
+		return (NULL);
+	while (str[i])
+	{
+		if (str[i] == '$')
+		{
+			i++;
+			i += ft_strlen(key);
+			j = 0;
+			while (env[j])
+			{
+				new_string[k] = env[j];
+				j++;
+				k++;
+			}
+		}
+		new_string[k] = str[i];
+		i++;
+		k++;
+	}
+	new_string[k] = '\0';
+	free(str);
+	printf("NEW_STRING VALUE : %s\n", new_string);
+	return (new_string);
+}
 
 // char	*new_string(char *str, t_env *env)
 // {
@@ -188,20 +187,33 @@ bool	check_if_expendable(char *str)
 
 char	*new_string(char *str, t_env *env)
 {
-    printf("VALEUR ACTUELLE DE STR : %s", str);
     int i;
+	char	*key;
+	char	*content;
+	char	*new_str;
+	char	*tmp;
 
     i = 0;
-    while (str[i])
+    printf("VALEUR ACTUELLE DE STR : %s\n", str);
+	new_str = ft_strdup(str);
+    printf("VALEUR ACTUELLE DE NEW_STR : %s\n", new_str);
+    while (new_str[i])
     {
-        printf("VALEUR ACTUELLE DE CHAR : %c", str[i]);
-        if (str[i] == '$')
+        if (new_str[i] == '$')
         {
             i++;
+			key = check_key(new_str + i);
+			content = check_string(key, env);
+			printf("KEY->CONTENT : %s\n", key);
+			printf("ENV->CONTENT : %s\n", key);
+			tmp = check_new_string(new_str, key, content);
+			new_str = tmp;
+			i = 0;
         }
+	    printf("VALEUR ACTUELLE DE NEW_CHAR : %c\n", new_str[i]);
         i++;
     }
-    return (str);
+    return (new_str);
 }
 
 char	*app_expend(char *ast, t_env *env, bool state)
