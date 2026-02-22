@@ -177,7 +177,7 @@ char	*check_new_string(char *str, char *key, char *env)
 //                 i = 0;
 // 			}
 // 			else
-// 				i += ft_strlen(str_key);
+// 				i += ft_strlen(str_key) + 1;
 // 			free(str_key);
 // 			free(str_env);
 // 		}
@@ -218,6 +218,7 @@ char	*new_string(char *str, t_env *env)
 	    printf("VALEUR ACTUELLE DE NEW_CHAR : %c\n", new_str[i]);
         i++;
     }
+	free(str);
     return (new_str);
 }
 
