@@ -110,21 +110,24 @@ char	*check_new_string(char *str, char *key, char *env)
 	int		j;
 	int		k;
 	int		len;
+	int		count;
 	char	*new_string;
 
 	i = 0;
 	k = 0;
+	count = 0;
 	len = ft_strlen(str) + ft_strlen(env) - ft_strlen(key) - 1;
 	new_string = malloc(sizeof(char) * (len + 1));
 	if (!new_string)
 		return (NULL);
 	while (str[i])
 	{
-		if (str[i] == '$')
+		if (str[i] == '$' && count == 0 && env != NULL)
 		{
 			i++;
-			i += ft_strlen(key);
 			j = 0;
+			i += ft_strlen(key);
+			count++;
 			while (env[j])
 			{
 				new_string[k] = env[j];
@@ -132,6 +135,8 @@ char	*check_new_string(char *str, char *key, char *env)
 				k++;
 			}
 		}
+		else if (env == NULL && str[i] == '$' && count == 0)
+			i += ft_strlen(key);
 		new_string[k] = str[i];
 		i++;
 		k++;
