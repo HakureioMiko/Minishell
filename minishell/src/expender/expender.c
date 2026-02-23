@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/23 13:53:16 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/23 15:32:52 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ bool	check_if_expendable(char *str)
 // 	}
 // 	return (i);
 // }
-
 
 char	*check_string(char *str, t_env *env)
 {
@@ -189,24 +188,23 @@ char	*check_new_string(char *str, char *key, char *env)
 // 	return (new_str);
 // }
 
-
 char	*new_string(char *str, t_env *env)
 {
-    int i;
+	int		i;
 	char	*key;
 	char	*content;
 	char	*new_str;
 	char	*tmp;
 
-    i = 0;
-    printf("VALEUR ACTUELLE DE STR : %s\n", str);
+	i = 0;
+	printf("VALEUR ACTUELLE DE STR : %s\n", str);
 	new_str = ft_strdup(str);
-    printf("VALEUR ACTUELLE DE NEW_STR : %s\n", new_str);
-    while (new_str[i])
-    {
-        if (new_str[i] == '$')
-        {
-            i++;
+	printf("VALEUR ACTUELLE DE NEW_STR : %s\n", new_str);
+	while (new_str[i])
+	{
+		if (new_str[i] == '$')
+		{
+			i++;
 			key = check_key(new_str + i);
 			content = check_string(key, env);
 			printf("KEY->CONTENT : %s\n", key);
@@ -214,12 +212,12 @@ char	*new_string(char *str, t_env *env)
 			tmp = check_new_string(new_str, key, content);
 			new_str = tmp;
 			i = 0;
-        }
-	    printf("VALEUR ACTUELLE DE NEW_CHAR : %c\n", new_str[i]);
-        i++;
-    }
+		}
+		printf("VALEUR ACTUELLE DE NEW_CHAR : %c\n", new_str[i]);
+		i++;
+	}
 	free(str);
-    return (new_str);
+	return (new_str);
 }
 
 char	*app_expend(char *ast, t_env *env, bool state)
@@ -244,7 +242,13 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 {
 	t_token		*current_token;
 	t_sub_token	*current_sub;
+	char		**tmp;
+	int			i;
+	int			j;
 
+	ast->cmd = malloc(sizeof(char *) * 100);
+	i = 0;
+	j = 0;
 	current_token = ast->cmd_token;
 	while (current_token != NULL && current_token->type == WORD)
 	{
@@ -252,15 +256,49 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 		while (current_sub != NULL)
 		{
 			if (current_sub->quote == DOUBLE)
+			{
 				current_sub->var = app_expend(current_sub->var, env, true);
+				ast->cmd[i] = ft_strdup(current_sub->var);
+				i++;
+			}
 			else if (current_sub->quote == NORMAL)
+			{
 				current_sub->var = app_expend(current_sub->var, env, false);
+				tmp = ft_split(current_sub->var, ' ');
+				while (tmp[j])
+				{
+					ast->cmd[i] = ft_strdup(tmp[j]);
+					j++;
+					i++;
+				}
+			}
+			j = 0;
 			current_sub = current_sub->next;
 		}
 		current_token = current_token->next;
 	}
+	ast->cmd[i] = NULL;
+	i = 0;
+	while (ast->cmd[i])
+	{
+		printf("%s\n", ast->cmd[i]);
+		i++;
+	}
 	return (ast);
 }
+
+// call expend de la version cmd
+// t_ast	*call_expand(t_ast *ast, t_env *env)
+// {
+// 	t_sub_token	*current_sub;
+
+// 	current_sub = ast->cmd_token->sub_token;
+// 	if (current_sub->quote == DOUBLE)
+// 		current_sub->var = app_expend(current_sub->var, env, true);
+// 	else if (current_sub->quote == NORMAL)
+// 		current_sub->var = app_expend(current_sub->var, env, false);
+// 	return (ast);
+// }
 
 t_ast	*expand_ast_checker(t_ast *curseur, t_env *env)
 {
