@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/20 14:22:19 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/23 14:55:55 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	redir_node(t_redir **redir, t_token **token)
 {
 	t_redir	*node;
 	t_token	*file;
+	t_redir	*current;
 
 	if (!(*token)->next)
 	{
@@ -63,11 +64,12 @@ int	redir_node(t_redir **redir, t_token **token)
 		(*redir) = node;
 		return (0);
 	}
-	while ((*redir)->next != NULL)
+	current = *redir;
+	while (current->next != NULL)
 	{
-		(*redir) = (*redir)->next;
+		current = current->next;
 	}
-	(*redir)->next = node;
+	current->next = node;
 	return (0);
 }
 
@@ -238,12 +240,17 @@ void	print_ast(t_ast *ast)
 					break ;
 			}
 		}
-		if (ast->left)
+		/* if (ast->left)
 			print_ast(ast->left);
 		if (ast->right)
 			print_ast(ast->right);
-		printf("\n");
+		printf("\n"); */
 	}
+	if (ast->left)
+			print_ast(ast->left);
+	if (ast->right)
+		print_ast(ast->right);
+	printf("\n");
 }
 
 int	parser(t_token **token)
