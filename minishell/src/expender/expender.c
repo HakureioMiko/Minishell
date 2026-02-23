@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/23 15:32:52 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/23 19:16:54 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,6 +238,49 @@ char	*app_expend(char *ast, t_env *env, bool state)
 
 // changer a partir de a ne pas changer var mais mettre dans un tableau
 
+int	count_tmp(char **str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i])
+		i++;
+	return (i);
+}
+
+int	expand_len(t_ast *ast, t_env *env)
+{
+	int			i;
+	char		**tmp;
+	t_token		*token;
+	t_sub_token	*sub_token;
+
+	i = 0;
+	token = ast->cmd_token;
+	while (token != NULL && token->type == WORD)
+	{
+		sub_token = token->sub_token;
+		while (sub_token != NULL)
+		{
+			if (sub_token->quote == DOUBLE)
+				i++;
+			else if (sub_token->quote == NORMAL)
+			{
+				sub_token->var = app_expend(sub_token->var, env, false);
+				tmp = ft_split(sub_token->var, ' ');
+				i += count_tmp(tmp);
+			}
+			sub_token = sub_token->next;
+		}
+		token = token->next;
+	}
+	return (i);
+}
+	// dans le return free_split(tmp);
+
+
 t_ast	*call_expand(t_ast *ast, t_env *env)
 {
 	t_token		*current_token;
@@ -246,7 +289,11 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 	int			i;
 	int			j;
 
-	ast->cmd = malloc(sizeof(char *) * 100);
+	// printf("VALEUR EXPLEN %d\n", expand_len(ast, env));
+	ast->cmd = malloc(sizeof(char *) * (expand_len(ast, env) + 1));
+	if (!ast->cmd)
+		return (ast);
+	// printf("HERE\n");
 	i = 0;
 	j = 0;
 	current_token = ast->cmd_token;
@@ -287,19 +334,7 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 	return (ast);
 }
 
-// call expend de la version cmd
-// t_ast	*call_expand(t_ast *ast, t_env *env)
-// {
-// 	t_sub_token	*current_sub;
-
-// 	current_sub = ast->cmd_token->sub_token;
-// 	if (current_sub->quote == DOUBLE)
-// 		current_sub->var = app_expend(current_sub->var, env, true);
-// 	else if (current_sub->quote == NORMAL)
-// 		current_sub->var = app_expend(current_sub->var, env, false);
-// 	return (ast);
-// }
-
+// NVM c'est celle la qu'on a pas besoin
 t_ast	*expand_ast_checker(t_ast *curseur, t_env *env)
 {
 	if (!curseur)

@@ -6,7 +6,7 @@
 #    By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/02/18 17:48:53 by mickzhan         ###   ########.fr        #
+#    Updated: 2026/02/23 16:09:00 by mickzhan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@
 
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I./includes -I./libft 
+CFLAGS = -Wall -Wextra -Werror -g3 -I./includes -I./libft 
 SRC_DIR = src/
 SRC =	main.c \
 		lexing/add_nodes.c \
