@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/20 17:26:52 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/23 13:53:16 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ char	*check_new_string(char *str, char *key, char *env)
 			}
 		}
 		else if (env == NULL && str[i] == '$' && count == 0)
-			i += ft_strlen(key);
+			i += ft_strlen(key) + 1;
 		new_string[k] = str[i];
 		i++;
 		k++;
