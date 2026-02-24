@@ -1,24 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/17 11:23:33 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/23 16:01:25 by ibrouin-         ###   ########.fr       */
+/*   Created: 2026/02/23 15:28:21 by ibrouin-          #+#    #+#             */
+/*   Updated: 2026/02/24 14:58:55 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
-
-// Unicode Color
-// Usage > printf("%s Hello World %s", COLOR, RESET);
+#ifndef EXECUTION_H
+# define EXECUTION_H
 
 # include "../libft/libft.h"
 # include "../lexing/lexer.h"
 # include "../builtin/builtin.h"
+# include "../parsing/parser.h"
+# include "../minishell.h"
 # include <readline/history.h>
 # include <readline/readline.h>
 // readline rl_clear_history, rl_on_new_line,
@@ -46,6 +45,7 @@
 // stat() lstat() fstat()
 
 # include <fcntl.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 // getenv()
@@ -53,43 +53,17 @@
 # include <unistd.h>
 // getcwd() chdir() isatty() ttyname() ttyslot()
 
-// ARBRE SYNTAXIQUE
+//EXECUTION
+int	execution(t_ast *ast, t_env *env);
+int	exec_cmd(t_ast *ast, t_env *env);
+int	exec_pipe(t_ast *ast, t_env *env);
+int	exec_and(t_ast *ast, t_env *env);
+int	exec_or(t_ast *ast, t_env *env);
 
-typedef enum e_ast_type
-{
-	AST_CMD,
-	AST_PIPE,
-	AST_AND,
-	AST_OR,
-	AST_SUBSHELL,
-}					t_ast_type;
+//PATH
+char	*find_path(t_env *env);
+char	*right_path(char **path, char *cmd);
+char    *find_cmd(t_env *env, char *cmd);
 
-typedef struct s_redir
-{
-	t_token_type	type;
-	t_token			*target;
-	struct s_redir	*next;
-}					t_redir;
-
-typedef struct s_ast
-{
-	t_ast_type		type;
-
-	struct s_ast	*left;
-	struct s_ast	*right;
-
-	t_token			*cmd_token;
-	t_redir			*redirs;
-	char 			**cmd;
-}					t_ast;
-
-
-//PARSING.C
-t_ast			*parser(t_token **token);
-t_ast			*parse_or(t_token **token);
-void			print_ast(t_ast *ast);
-
-//CHECK_TOKEN.C
-bool	            check_token(t_token *token);
 
 #endif

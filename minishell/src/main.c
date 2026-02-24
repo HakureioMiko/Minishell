@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/23 10:50:37 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/24 19:32:41 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,15 @@ int	main(int ac, char **av, char **envp)
 {
 	char	*line;
 	t_token	*mini_vars;
-	//t_env	*env;
+	t_ast	*ast;
+	t_env	*env;
 
 	(void)av;
 	(void)ac;
 	(void)envp;
 	mini_vars = NULL;
-	//env = NULL;
-	//env = env_content(env, envp);
+	env = NULL;
+	env = env_content(env, envp);
 	/*AFFICHAGE D'ENV
 	while (env->next != NULL)
 	{
@@ -65,7 +66,8 @@ int	main(int ac, char **av, char **envp)
 		if (mini_vars)
 		{
 			//printmini(&mini_vars);
-			parser(&mini_vars);
+			ast = parser(&mini_vars);
+			//execution(ast, env);
 			ft_miniclear(&mini_vars);
 		}
 		free(line);

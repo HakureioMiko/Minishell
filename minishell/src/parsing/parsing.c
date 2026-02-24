@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/23 14:55:55 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/24 19:32:45 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,20 +240,20 @@ void	print_ast(t_ast *ast)
 					break ;
 			}
 		}
-		/* if (ast->left)
+		if (ast->left)
 			print_ast(ast->left);
 		if (ast->right)
 			print_ast(ast->right);
-		printf("\n"); */
+		printf("\n");
 	}
-	if (ast->left)
+/* 	if (ast->left)
 			print_ast(ast->left);
 	if (ast->right)
 		print_ast(ast->right);
-	printf("\n");
+	printf("\n"); */
 }
 
-int	parser(t_token **token)
+t_ast	*parser(t_token **token)
 {
 	t_ast	*ast;
 
@@ -263,9 +263,9 @@ int	parser(t_token **token)
 	if (check_token((*token)) == 1)
 	{
 		ft_printf(2, "PRINTF TESTER : syntax error near unexpected token\n");
-		return (2);
+		return (NULL);
 	}
 	ast = parse_or(token);
 	print_ast(ast);
-	return (0);
+	return (ast);
 }

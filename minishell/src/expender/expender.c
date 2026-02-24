@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expender.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/23 15:35:15 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/23 16:42:24 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,11 +272,11 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 	}
 	ast->cmd[i] = NULL;
 	i = 0;
-	while (ast->cmd[i])
+	/* while (ast->cmd[i])
 	{
 		printf("%s\n", ast->cmd[i]);
 		i++;
-	}
+	} */
 	return (ast);
 }
 
