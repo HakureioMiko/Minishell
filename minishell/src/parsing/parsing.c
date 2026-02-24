@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/23 14:55:55 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/24 15:28:30 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-#include "parser.h"
+#include "../minishell.h"
 
 /* t_token	*lstfirst_token(t_token *lst)
 {
@@ -240,20 +240,20 @@ void	print_ast(t_ast *ast)
 					break ;
 			}
 		}
-		/* if (ast->left)
+		 if (ast->left)
 			print_ast(ast->left);
 		if (ast->right)
 			print_ast(ast->right);
-		printf("\n"); */
+		printf("\n"); 
 	}
-	if (ast->left)
-			print_ast(ast->left);
-	if (ast->right)
-		print_ast(ast->right);
-	printf("\n");
+	// if (ast->left)
+	// 		print_ast(ast->left);
+	// if (ast->right)
+	// 	print_ast(ast->right);
+	// printf("\n");
 }
 
-int	parser(t_token **token)
+int	parser(t_token **token, t_env *env)
 {
 	t_ast	*ast;
 
@@ -266,6 +266,7 @@ int	parser(t_token **token)
 		return (2);
 	}
 	ast = parse_or(token);
+	ast = expand_function(ast, env);
 	print_ast(ast);
 	return (0);
 }
