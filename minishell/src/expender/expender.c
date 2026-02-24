@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/23 19:16:54 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/24 14:05:59 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,23 @@ char	*check_key(char *str)
 	return (key);
 }
 
+// char	*new_string_cpy(char *dest, char *src, int start)
+// {
+// 	int i;
+
+// 	i = 0;
+// 	if (!src)
+// 		return (dest);
+// 	while (src[i])
+// 	{
+// 		printf("VALUE SRC[I] : %c\n", src[i]);
+// 		dest[start + i] = src[i];
+// 		i++;
+// 	}
+// 	printf("VALUE DEST : %s", dest);
+// 	return (dest);
+// }
+
 char	*check_new_string(char *str, char *key, char *env)
 {
 	int		i;
@@ -127,6 +144,7 @@ char	*check_new_string(char *str, char *key, char *env)
 			j = 0;
 			i += ft_strlen(key);
 			count++;
+			// new_string = new_string_cpy(new_string, env, i);
 			while (env[j])
 			{
 				new_string[k] = env[j];
@@ -141,9 +159,8 @@ char	*check_new_string(char *str, char *key, char *env)
 		k++;
 	}
 	new_string[k] = '\0';
-	free(str);
 	printf("NEW_STRING VALUE : %s\n", new_string);
-	return (new_string);
+	return (free(str), new_string);
 }
 
 // char	*new_string(char *str, t_env *env)
@@ -208,32 +225,32 @@ char	*new_string(char *str, t_env *env)
 			key = check_key(new_str + i);
 			content = check_string(key, env);
 			printf("KEY->CONTENT : %s\n", key);
-			printf("ENV->CONTENT : %s\n", key);
+			printf("ENV->CONTENT : %s\n", content);
 			tmp = check_new_string(new_str, key, content);
 			new_str = tmp;
 			i = 0;
 		}
-		printf("VALEUR ACTUELLE DE NEW_CHAR : %c\n", new_str[i]);
+		// printf("VALEUR ACTUELLE DE NEW_CHAR : %c\n", new_str[i]);
 		i++;
 	}
 	free(str);
 	return (new_str);
 }
 
-char	*app_expend(char *ast, t_env *env, bool state)
+char	*app_expend(char *str, t_env *env, bool state)
 {
-	if (!ast)
+	if (!str)
 		return (NULL);
-	if (check_if_expendable(ast) == 0)
-		return (ast);
+	if (check_if_expendable(str) == 0)
+		return (str);
 	else
 	{
 		if (state == true)
-			ast = new_string(ast, env);
+			str = new_string(str, env);
 		else if (state == false)
-			ast = new_string(ast, env);
+			str = new_string(str, env);
 	}
-	return (ast);
+	return (str);
 }
 
 // changer a partir de a ne pas changer var mais mettre dans un tableau
@@ -278,8 +295,7 @@ int	expand_len(t_ast *ast, t_env *env)
 	}
 	return (i);
 }
-	// dans le return free_split(tmp);
-
+// dans le return (free_split(tmp));
 
 t_ast	*call_expand(t_ast *ast, t_env *env)
 {
@@ -289,11 +305,6 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 	int			i;
 	int			j;
 
-	// printf("VALEUR EXPLEN %d\n", expand_len(ast, env));
-	ast->cmd = malloc(sizeof(char *) * (expand_len(ast, env) + 1));
-	if (!ast->cmd)
-		return (ast);
-	// printf("HERE\n");
 	i = 0;
 	j = 0;
 	current_token = ast->cmd_token;
@@ -335,17 +346,31 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 }
 
 // NVM c'est celle la qu'on a pas besoin
-t_ast	*expand_ast_checker(t_ast *curseur, t_env *env)
+
+t_ast	*expand_ast_checker(t_ast *ast, t_env *env)
 {
-	if (!curseur)
+	if (!ast)
 		return (NULL);
-	if (check_if_word(curseur) == 1)
-		call_expand(curseur, env);
-	if (curseur->left)
-		expand_ast_checker(curseur->left, env);
-	if (curseur->right)
-		expand_ast_checker(curseur->right, env);
-	return (curseur);
+	if (check_if_word(ast) == 1)
+	{
+		ast->cmd = malloc(sizeof(char *) * (expand_len(ast, env) + 1));
+		if (!ast->cmd)
+			return (ast);
+		call_expand(ast, env);
+	}
+	if (check_if_expendable(ast->redirs->target->sub_token->var) == 1
+		&& ast->cmd_token->sub_token->quote == DOUBLE)
+		ast->redirs->target->sub_token->var = app_expend(ast->redirs->target->sub_token->var,
+				env, true);
+	else if (check_if_expendable(ast->redirs->target->sub_token->var) == 1
+		&& ast->cmd_token->sub_token->quote == NORMAL)
+		ast->redirs->target->sub_token->var = app_expend(ast->redirs->target->sub_token->var,
+				env, false);
+	if (ast->left)
+		expand_ast_checker(ast->left, env);
+	if (ast->right)
+		expand_ast_checker(ast->right, env);
+	return (ast);
 }
 
 t_ast	*expand_function(t_ast *ast, t_env *env)
