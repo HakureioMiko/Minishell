@@ -6,26 +6,11 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/24 15:40:30 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/26 15:09:56 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-// copy permet de copie la valeur de $
-// paste permet de la mettre en leurs valeur et le renvoye
-
-// typedef struct s_exp
-// {
-// 	int				last_command;
-
-// 	char			*copy;
-// 	char			*paste;
-// 	t_state			state;
-// 	t_env			*env;
-// 	bool			in_doc;
-// 	struct s_exp	*next;
-// }					t_exp;
 
 bool	check_if_word(t_ast *ast)
 {
@@ -49,20 +34,6 @@ bool	check_if_expendable(char *str)
 	}
 	return (false);
 }
-
-// int	len_dollars(char *ast)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (ast[i])
-// 	{
-// 		if (ast[i] == ' ' || ast[i] == '$')
-// 			return (i);
-// 		i++;
-// 	}
-// 	return (i);
-// }
 
 char	*check_string(char *str, t_env *env)
 {
@@ -105,22 +76,6 @@ char	*check_key(char *str)
 	return (key);
 }
 
-// char	*new_string_cpy(char *dest, char *src, int start)
-// {
-// 	int i;
-
-// 	i = 0;
-// 	if (!src)
-// 		return (dest);
-// 	while (src[i])
-// 	{
-// 		printf("VALUE SRC[I] : %c\n", src[i]);
-// 		dest[start + i] = src[i];
-// 		i++;
-// 	}
-// 	printf("VALUE DEST : %s", dest);
-// 	return (dest);
-// }
 
 char	*check_new_string(char *str, char *key, char *env)
 {
@@ -164,48 +119,6 @@ char	*check_new_string(char *str, char *key, char *env)
 	printf("NEW_STRING VALUE : %s\n", new_string);
 	return (free(str), new_string);
 }
-
-// char	*new_string(char *str, t_env *env)
-// {
-// 	int		i;
-// 	char	*str_key;
-// 	char	*str_env;
-// 	char	*new_str;
-// 	char	*temp;
-
-// 	i = 0;
-// 	if (!str)
-// 		return (NULL);
-// 	new_str = ft_strdup(str);
-// 	if (!new_str)
-// 		return (NULL);
-// 	while (new_str[i])
-// 	{
-//         printf("CONTENT CHAR: %c\n", new_str[i]);
-// 		if (new_str[i] == '$')
-// 		{
-// 			i++;
-//             printf("NEW_STRING AVANT : %s\n", new_str);
-// 			str_key = check_key(new_str + i);
-// 			str_env = check_string(str_key, env);
-// 			if (str_env)
-// 			{
-// 				temp = check_new_string(new_str, str_key, str_env);
-// 				new_str = temp;
-//                 i = 0;
-// 			}
-// 			else
-// 				i += ft_strlen(str_key) + 1;
-// 			free(str_key);
-// 			free(str_env);
-// 		}
-// 		else
-// 			i++;
-// 	}
-//     printf("NEW_STRING APRES : %s\n", new_str);
-// 	free(str);
-// 	return (new_str);
-// }
 
 char	*new_string(char *str, t_env *env)
 {
@@ -390,3 +303,77 @@ t_ast	*expand_function(t_ast *ast, t_env *env)
 	ast = expand_ast(curseur, env);
 	return (ast);
 }
+
+// t_ast	*expension(t_ast *ast, t_sub_token *current_sub, t_env *env)
+// {
+// 	char	**tmp;
+// 	int		i;
+// 	int		j;
+
+// 	i = 0;
+// 	j = 0;
+// 	if (current_sub->quote == DOUBLE)
+// 	{
+// 		current_sub->var = app_expend(current_sub->var, env, true);
+// 		ast->cmd[i] = ft_strdup(current_sub->var);
+// 		i++;
+// 	}
+// 	else if (current_sub->quote == NORMAL)
+// 	{
+// 		current_sub->var = app_expend(current_sub->var, env, false);
+// 		tmp = ft_split(current_sub->var, ' ');
+// 		while (tmp[j])
+// 		{
+// 			ast->cmd[i] = ft_strdup(tmp[j]);
+// 			j++;
+// 			i++;
+// 		}
+// 	}
+// 	return (ast->cmd[i] = NULL, ast);
+// }
+
+// t_ast	*call_expand(t_ast *ast, t_env *env)
+// {
+// 	t_token		*current_token;
+// 	t_sub_token	*current_sub;
+
+// 	current_token = ast->cmd_token;
+// 	while (current_token != NULL && current_token->type == WORD)
+// 	{
+// 		current_sub = current_token->sub_token;
+// 		while (current_sub != NULL)
+// 		{
+// 			ast = expension(ast, current_sub, env);
+// 			current_sub = current_sub->next;
+// 		}
+// 		current_token = current_token->next;
+// 	}
+// 	int i = 0;
+// 	while (ast->cmd[i])
+// 	{
+// 		printf("PRINT SRTING %s", ast->cmd[i]);
+// 		i++;
+// 	}
+// 	return (ast);
+// }
+
+
+// t_ast	*expand_redir(t_ast *ast, t_env *env)
+// {
+// 	t_ast	*tmp;
+
+// 	tmp = ast;
+// 	while (ast->redirs->next != NULL)
+// 	{
+// 		if (check_if_expendable(ast->redirs->target->sub_token->var) == 1
+// 			&& ast->cmd_token->sub_token->quote == DOUBLE)
+// 			ast->redirs->target->sub_token->var = app_expend(ast->redirs->target->sub_token->var,
+// 					env, true);
+// 		else if (check_if_expendable(ast->redirs->target->sub_token->var) == 1
+// 			&& ast->cmd_token->sub_token->quote == NORMAL)
+// 			ast->redirs->target->sub_token->var = app_expend(ast->redirs->target->sub_token->var,
+// 					env, false);
+// 		ast->redirs = ast->redirs->next;
+// 	}
+// 	return (tmp);
+// }
