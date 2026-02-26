@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/24 19:18:50 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/26 15:49:16 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int	execution(t_ast *ast, t_env *env)
 			exit_status = exec_and(ast, env);
 		if (ast->type == AST_OR)
 			exit_status = exec_or(ast, env);
+		if (ast->type == AST_SUBSHELL)
+			exit_status = exec_subshell(ast, env);
 		return (exit_status);
 	}
 	return (0);
@@ -54,6 +56,7 @@ int	exec_cmd(t_ast *ast, t_env *env)
 		printf("error");
 	if (pid == 0)
 	{
+		redirection(ast);
 		execve(path, ast->cmd, NULL);
 		perror("minishell");
 		exit (127);
@@ -122,5 +125,25 @@ int	exec_or(t_ast *ast, t_env *env)
 	if (exit_status != 0 )
 		exit_status = execution(ast->right, env);
 	return (exit_status);
+}
+
+int	exec_subshell(t_ast *ast, t_env *env)
+{
+	pid_t	pid;
+	int		status;
+
+	pid = fork();
+	if (pid == -1)
+		printf("error");
+	if (pid == 0)
+	{
+		redirection(ast);
+		execution(ast->left, env);
+		exit (0);
+	}
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	return (0);
 }
 

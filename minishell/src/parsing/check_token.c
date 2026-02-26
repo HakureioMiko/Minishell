@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:06 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/18 14:26:32 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/26 11:35:27 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ bool	last_next_token(t_token *token)
 	{
 		if (token->type > 6 && token->next->type > 6)
 			return (true);
+		else if ((token->type == 6) && (token->next->type > 0 && token->next->type < 5))
+			return (false);
 		else if ((token->type > 0 && token->type < 7) && (token->next->type > 0 && token->next->type < 7))
 			return (true);
 		else if ((token->type == 5 || token->type == 6) && (token->next->type == 5 || token->next->type == 6))

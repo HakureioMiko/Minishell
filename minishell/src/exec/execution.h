@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/24 14:58:55 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/26 15:42:20 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,14 @@ int	exec_cmd(t_ast *ast, t_env *env);
 int	exec_pipe(t_ast *ast, t_env *env);
 int	exec_and(t_ast *ast, t_env *env);
 int	exec_or(t_ast *ast, t_env *env);
+int	exec_subshell(t_ast *ast, t_env *env);
 
 //PATH
 char	*find_path(t_env *env);
 char	*right_path(char **path, char *cmd);
 char    *find_cmd(t_env *env, char *cmd);
 
+//REDIRECTION
+void    redirection(t_ast *node);
 
 #endif

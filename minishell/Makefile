@@ -6,7 +6,7 @@
 #    By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/02/24 14:20:08 by ibrouin-         ###   ########.fr        #
+#    Updated: 2026/02/26 15:14:14 by ibrouin-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,8 @@ SRC =	main.c \
 		parsing/parsing.c \
 		expender/expender.c \
 		exec/execution.c \
-		exec/path.c
+		exec/path.c \
+		exec/redirection.c
 		
 OBJ_DIR = obj/
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))

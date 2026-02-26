@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/23 16:42:24 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/26 19:48:46 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,10 +299,6 @@ t_ast	*expand_ast_checker(t_ast *curseur, t_env *env)
 		return (NULL);
 	if (check_if_word(curseur) == 1)
 		call_expand(curseur, env);
-	if (curseur->left)
-		expand_ast_checker(curseur->left, env);
-	if (curseur->right)
-		expand_ast_checker(curseur->right, env);
 	return (curseur);
 }
 

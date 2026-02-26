@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/24 19:32:45 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/26 16:00:38 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ int	token_list_redir(t_token **token, t_ast *node)
 		prev = NULL;
 	if ((redir_node(&node->redirs, token)) == 1)
 		return (1);
-	//node->redirs->type = (*token)->type;
 	file = (*token)->next;
 	redir = (*token);
 	*token = (*token)->next;
@@ -100,7 +99,6 @@ int	token_list_redir(t_token **token, t_ast *node)
 	free(redir);
 	file->prev = NULL;
 	file->next = NULL;
-	//node->redirs->target = file; 
 	if (prev)
 		prev->next = next;
 	if (next)
@@ -125,10 +123,32 @@ t_ast	*parse_cmd(t_token **token)
 		if (*token && (*token)->type == R_PAR)
 		{
 			*token = (*token)->next;
-			return (node);
+			//return (node);
 		}
 		else
+		{
 			ft_printf(2, "PRINTF TESTERrrr : syntax error near unexpected token\n");
+			return (NULL);
+		}
+		if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
+		{
+			//node = ast_node(AST_CMD);
+			if ((token_list_redir(token, node)) == 1)
+				return (NULL);
+			if (*token)
+				node->cmd_token = *token;
+		}
+		while (*token && (*token)->type < 5)
+		{
+			if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
+			{
+				if ((token_list_redir(token, node)) == 1)
+					return (NULL);
+			}
+			else if (*token)
+				*token = (*token)->next;
+		}
+		return (node);
 	}
 	if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
 	{
@@ -266,6 +286,6 @@ t_ast	*parser(t_token **token)
 		return (NULL);
 	}
 	ast = parse_or(token);
-	print_ast(ast);
+	//print_ast(ast);
 	return (ast);
 }
