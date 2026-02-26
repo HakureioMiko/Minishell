@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/26 15:09:56 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/26 15:12:33 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,53 +212,107 @@ int	expand_len(t_ast *ast, t_env *env)
 }
 // dans le return (free_split(tmp));
 
+
+t_ast	*expension(t_ast *ast, t_sub_token *current_sub, t_env *env)
+{
+	char	**tmp;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	if (current_sub->quote == DOUBLE)
+	{
+		current_sub->var = app_expend(current_sub->var, env, true);
+		ast->cmd[i] = ft_strdup(current_sub->var);
+		i++;
+	}
+	else if (current_sub->quote == NORMAL)
+	{
+		current_sub->var = app_expend(current_sub->var, env, false);
+		tmp = ft_split(current_sub->var, ' ');
+		while (tmp[j])
+		{
+			ast->cmd[i] = ft_strdup(tmp[j]);
+			j++;
+			i++;
+		}
+	}
+	return (ast->cmd[i] = NULL, ast);
+}
+
 t_ast	*call_expand(t_ast *ast, t_env *env)
 {
 	t_token		*current_token;
 	t_sub_token	*current_sub;
-	char		**tmp;
-	int			i;
-	int			j;
 
-	i = 0;
-	j = 0;
 	current_token = ast->cmd_token;
 	while (current_token != NULL && current_token->type == WORD)
 	{
 		current_sub = current_token->sub_token;
 		while (current_sub != NULL)
 		{
-			if (current_sub->quote == DOUBLE)
-			{
-				current_sub->var = app_expend(current_sub->var, env, true);
-				ast->cmd[i] = ft_strdup(current_sub->var);
-				i++;
-			}
-			else if (current_sub->quote == NORMAL)
-			{
-				current_sub->var = app_expend(current_sub->var, env, false);
-				tmp = ft_split(current_sub->var, ' ');
-				while (tmp[j])
-				{
-					ast->cmd[i] = ft_strdup(tmp[j]);
-					j++;
-					i++;
-				}
-			}
-			j = 0;
+			ast = expension(ast, current_sub, env);
 			current_sub = current_sub->next;
 		}
 		current_token = current_token->next;
 	}
-	ast->cmd[i] = NULL;
-	i = 0;
+	int i = 0;
 	while (ast->cmd[i])
 	{
-		printf("%s\n", ast->cmd[i]);
+		printf("PRINT SRTING %s\n", ast->cmd[i]);
 		i++;
 	}
 	return (ast);
 }
+
+// t_ast	*call_expand(t_ast *ast, t_env *env)
+// {
+// 	t_token		*current_token;
+// 	t_sub_token	*current_sub;
+// 	char		**tmp;
+// 	int			i;
+// 	int			j;
+
+// 	i = 0;
+// 	j = 0;
+// 	current_token = ast->cmd_token;
+// 	while (current_token != NULL && current_token->type == WORD)
+// 	{
+// 		current_sub = current_token->sub_token;
+// 		while (current_sub != NULL)
+// 		{
+// 			if (current_sub->quote == DOUBLE)
+// 			{
+// 				current_sub->var = app_expend(current_sub->var, env, true);
+// 				ast->cmd[i] = ft_strdup(current_sub->var);
+// 				i++;
+// 			}
+// 			else if (current_sub->quote == NORMAL)
+// 			{
+// 				current_sub->var = app_expend(current_sub->var, env, false);
+// 				tmp = ft_split(current_sub->var, ' ');
+// 				while (tmp[j])
+// 				{
+// 					ast->cmd[i] = ft_strdup(tmp[j]);
+// 					j++;
+// 					i++;
+// 				}
+// 			}
+// 			j = 0;
+// 			current_sub = current_sub->next;
+// 		}
+// 		current_token = current_token->next;
+// 	}
+// 	ast->cmd[i] = NULL;
+// 	i = 0;
+// 	while (ast->cmd[i])
+// 	{
+// 		printf("%s\n", ast->cmd[i]);
+// 		i++;
+// 	}
+// 	return (ast);
+// }
 
 // NVM c'est celle la qu'on a pas besoin
 
@@ -304,58 +358,7 @@ t_ast	*expand_function(t_ast *ast, t_env *env)
 	return (ast);
 }
 
-// t_ast	*expension(t_ast *ast, t_sub_token *current_sub, t_env *env)
-// {
-// 	char	**tmp;
-// 	int		i;
-// 	int		j;
 
-// 	i = 0;
-// 	j = 0;
-// 	if (current_sub->quote == DOUBLE)
-// 	{
-// 		current_sub->var = app_expend(current_sub->var, env, true);
-// 		ast->cmd[i] = ft_strdup(current_sub->var);
-// 		i++;
-// 	}
-// 	else if (current_sub->quote == NORMAL)
-// 	{
-// 		current_sub->var = app_expend(current_sub->var, env, false);
-// 		tmp = ft_split(current_sub->var, ' ');
-// 		while (tmp[j])
-// 		{
-// 			ast->cmd[i] = ft_strdup(tmp[j]);
-// 			j++;
-// 			i++;
-// 		}
-// 	}
-// 	return (ast->cmd[i] = NULL, ast);
-// }
-
-// t_ast	*call_expand(t_ast *ast, t_env *env)
-// {
-// 	t_token		*current_token;
-// 	t_sub_token	*current_sub;
-
-// 	current_token = ast->cmd_token;
-// 	while (current_token != NULL && current_token->type == WORD)
-// 	{
-// 		current_sub = current_token->sub_token;
-// 		while (current_sub != NULL)
-// 		{
-// 			ast = expension(ast, current_sub, env);
-// 			current_sub = current_sub->next;
-// 		}
-// 		current_token = current_token->next;
-// 	}
-// 	int i = 0;
-// 	while (ast->cmd[i])
-// 	{
-// 		printf("PRINT SRTING %s", ast->cmd[i]);
-// 		i++;
-// 	}
-// 	return (ast);
-// }
 
 
 // t_ast	*expand_redir(t_ast *ast, t_env *env)
