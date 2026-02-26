@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/26 15:12:33 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/26 15:25:58 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,7 +260,7 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 	int i = 0;
 	while (ast->cmd[i])
 	{
-		printf("PRINT SRTING %s\n", ast->cmd[i]);
+		printf("PRINT CMD : %s\n", ast->cmd[i]);
 		i++;
 	}
 	return (ast);
