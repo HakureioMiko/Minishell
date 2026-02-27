@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/27 11:13:49 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/27 14:57:14 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	main(int ac, char **av, char **envp)
 		}
 		if (mini_vars)
 		{
-			//printmini(&mini_vars);
+			printmini(&mini_vars);
 			//ast = parser(&mini_vars);
 			//execution(ast, env);
 			ft_miniclear(&mini_vars);

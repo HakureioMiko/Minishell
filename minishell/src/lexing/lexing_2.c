@@ -6,31 +6,17 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:30:32 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/27 11:57:36 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/27 15:28:17 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-char	*add_char(char *buffer, char new, t_state *state)
+void	add_char_2(char *buffer, char new, char *temp)
 {
-	char	*temp;
-	int		len;
-	int		i;
+	int	i;
 
-	if (!buffer)
-		len = 0;
-	else
-		len = ft_strlen(buffer);
 	i = 0;
-	temp = malloc(sizeof(char) * len + 2);
-	if (!temp)
-	{
-		if (buffer)
-			free(buffer);
-		*state = ERROR;
-		return (NULL);
-	}
 	if (buffer)
 	{
 		while (buffer[i] != '\0')
@@ -42,6 +28,26 @@ char	*add_char(char *buffer, char new, t_state *state)
 	temp[i] = new;
 	i++;
 	temp[i] = '\0';
+}
+
+char	*add_char(char *buffer, char new, t_state *state)
+{
+	char	*temp;
+	int		len;
+
+	if (!buffer)
+		len = 0;
+	else
+		len = ft_strlen(buffer);
+	temp = malloc(sizeof(char) * len + 2);
+	if (!temp)
+	{
+		if (buffer)
+			free(buffer);
+		*state = ERROR;
+		return (NULL);
+	}
+	add_char_2(buffer, new, temp);
 	free(buffer);
 	return (temp);
 }
@@ -57,11 +63,28 @@ void	close_token(t_token **mini_vars)
 	}
 }
 
+void	buffer_full_2(t_token **mini_vars, char **buffer, t_state *state)
+{
+	if (*buffer[0] == '<')
+		lstadd_back(addnode(INFILE), mini_vars, state);
+	if (*buffer[0] == '>')
+		lstadd_back(addnode(OUTFILE), mini_vars, state);
+	if (*buffer[0] == '|')
+		lstadd_back(addnode(PIPE), mini_vars, state);
+	if (*buffer[0] == '&')
+		lstadd_back(addnode(WORD), mini_vars, state);
+	lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars, state);
+	free(*buffer);
+	*buffer = NULL;
+	close_token(mini_vars);
+}
+
 void	buffer_full(t_token **mini_vars, char **buffer, t_state *state)
 {
 	if (!*buffer)
 		return ;
-	if (*buffer && (*buffer[0] != '<' && *buffer[0] != '>' && *buffer[0] != '|' && *buffer[0] != '&'))
+	if (*buffer && (*buffer[0] != '<' && *buffer[0] != '>'
+			&& *buffer[0] != '|' && *buffer[0] != '&'))
 	{
 		if (!(*mini_vars))
 			lstadd_back(addnode(WORD), mini_vars, state);
@@ -69,21 +92,10 @@ void	buffer_full(t_token **mini_vars, char **buffer, t_state *state)
 		free(*buffer);
 		*buffer = NULL;
 	}
-	else if (*buffer && (*buffer[0] == '<' || *buffer[0] == '>' || *buffer[0] == '|'
-		|| *buffer[0] == '&'))
+	else if (*buffer && (*buffer[0] == '<' || *buffer[0] == '>'
+			|| *buffer[0] == '|' || *buffer[0] == '&'))
 	{
-		if (*buffer[0] == '<')
-			lstadd_back(addnode(INFILE), mini_vars, state);
-		if (*buffer[0] == '>')
-			lstadd_back(addnode(OUTFILE), mini_vars, state);
-		if (*buffer[0] == '|')
-			lstadd_back(addnode(PIPE), mini_vars, state);
-		if (*buffer[0] == '&')
-			lstadd_back(addnode(WORD), mini_vars, state);
-		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars, state);
-		free(*buffer);
-		*buffer = NULL;
-		close_token(mini_vars);
+		buffer_full_2(mini_vars, buffer, state);
 	}
 }
 

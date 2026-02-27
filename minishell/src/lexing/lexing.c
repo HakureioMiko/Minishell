@@ -25,14 +25,14 @@ void	normal_state(char **buffer, char cara, t_state *state, t_token **mini)
 	else if (cara == '(' || cara == ')')
 		brackets(buffer, cara, mini, state);
 	else if (cara == '<' || cara == '>')
-		angles_brackets(buffer, cara, mini, state);
+		angle_bracket(buffer, cara, mini, state);
 	else if (cara == 39 || cara == '"')
 		quotes(buffer, cara, mini, state);
 	else if (cara >= '!' && cara <= '~')
 		other_cara(buffer, cara, mini, state);
 }
 
-int	cara_iteration(char *line, char **buffer, t_token **mini_vars, t_state *state)
+int	cara_iteration(char *line, char **buffer, t_token **mini, t_state *state)
 {
 	int		i;
 
@@ -44,11 +44,11 @@ int	cara_iteration(char *line, char **buffer, t_token **mini_vars, t_state *stat
 	while (line[i] != '\0')
 	{
 		if (*state == NORMAL)
-			normal_state(buffer, line[i], state, mini_vars);
+			normal_state(buffer, line[i], state, mini);
 		else if (*state == IN_D_QUOTE)
-			in_d_quote_state(buffer, line[i], state, mini_vars);
+			in_d_quote_state(buffer, line[i], state, mini);
 		else if (*state == IN_S_QUOTE)
-			in_s_quote_state(buffer, line[i], state, mini_vars);
+			in_s_quote_state(buffer, line[i], state, mini);
 		if (*state == ERROR)
 			return (0);
 		i++;
@@ -61,7 +61,7 @@ void	last_token(char **buffer, t_token **mini_vars, t_state *state)
 	t_token	*current;
 
 	if (*buffer && (*buffer[0] == '<' || *buffer[0] == '>' || *buffer[0] == '|'
-		|| *buffer[0] == '(' || *buffer[0] == ')'))
+			|| *buffer[0] == '(' || *buffer[0] == ')'))
 	{
 		if (*buffer[0] == '<')
 			lstadd_back(addnode(INFILE), mini_vars, state);
@@ -85,6 +85,25 @@ void	last_token(char **buffer, t_token **mini_vars, t_state *state)
 	free(*buffer);
 }
 
+int	lexing_errors(t_token **mini_vars, t_state state, char *buffer)
+{
+	if (state == 1 || state == 2)
+	{
+		ft_miniclear(mini_vars);
+		if (buffer)
+			free(buffer);
+		printf("minishell: unclosed quote\n");
+		return (1);
+	}
+	if (state == ERROR)
+	{
+		ft_miniclear(mini_vars);
+		printf("minishell: cannot allocate memory\n");
+		return (1);
+	}
+	return (0);
+}
+
 t_token	*lexing(t_token **mini_vars, char *line)
 {
 	char	*buffer;
@@ -94,29 +113,13 @@ t_token	*lexing(t_token **mini_vars, char *line)
 	buffer = NULL;
 	if ((cara_iteration(line, &buffer, mini_vars, &state)) == 1)
 		return (NULL);
-	if (state == 1 || state == 2)
-	{
-		ft_miniclear(mini_vars);
-		if(buffer)
-			free(buffer);
-		printf("minishell: unclosed quote\n");
+	if (lexing_errors(mini_vars, state, buffer) == 1)
 		return (NULL);
-	}
-	if (state == ERROR)
-	{
-		ft_miniclear(mini_vars);
-		//if(buffer)
-		//	free(buffer);
-		printf("minishell: cannot allocate memory\n");
-		return (NULL);
-	}
 	if (buffer)
 		last_token(&buffer, mini_vars, &state);
 	if (state == ERROR)
 	{
 		ft_miniclear(mini_vars);
-		//if (buffer)
-		//	free(buffer);
 		printf("minishell: cannot allocate memory\n");
 		return (NULL);
 	}
