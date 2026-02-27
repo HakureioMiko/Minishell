@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/24 14:19:13 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/27 18:30:27 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ int	main(int ac, char **av, char **envp)
 		{
 			mini_vars = lexing(&mini_vars, line);
 		}
-		//if (*line)
-		//	add_history(line);
+		if (*line)
+			add_history(line);
 		if (!line)
 		{
 			free(line);
@@ -64,7 +64,7 @@ int	main(int ac, char **av, char **envp)
 		}
 		if (mini_vars)
 		{
-			//printmini(&mini_vars);
+			printmini(&mini_vars);
 			parser(&mini_vars, env);
 			ft_miniclear(&mini_vars);
 		}
