@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 11:11:16 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/13 15:19:35 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/27 11:41:40 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	angles_brackets(char **buffer, char cara, t_token **mini_vars, t_state *sta
 		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars, state);
 		free(*buffer);
 		*buffer = NULL;
-		*buffer = add_char(*buffer, cara);
+		*buffer = add_char(*buffer, cara, state);
 	}
 	else if (*buffer && *buffer[0] == cara)
 		angles_brackets_2(buffer, cara, mini_vars, state);
@@ -50,10 +50,10 @@ void	angles_brackets(char **buffer, char cara, t_token **mini_vars, t_state *sta
 		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars, state);
 		free(*buffer);
 		*buffer = NULL;
-		*buffer = add_char(*buffer, cara);
+		*buffer = add_char(*buffer, cara, state);
 	}
 	else
-		*buffer = add_char(*buffer, cara);
+		*buffer = add_char(*buffer, cara, state);
 	close_token(mini_vars);
 }
 
@@ -99,7 +99,7 @@ void	meta_cara(char **buffer, char cara, t_token **mini_vars, t_state *state)
 		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars, state);
 		free(*buffer);
 		*buffer = NULL;
-		*buffer = add_char(*buffer, cara);
+		*buffer = add_char(*buffer, cara, state);
 	}
 	else if (*buffer && (*buffer[0] == '&' && cara == '|'))
 	{
@@ -108,7 +108,7 @@ void	meta_cara(char **buffer, char cara, t_token **mini_vars, t_state *state)
 		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars, state);
 		free(*buffer);
 		*buffer = NULL;
-		*buffer = add_char(*buffer, cara);
+		*buffer = add_char(*buffer, cara, state);
 	}
 	else if (*buffer && (*buffer[0] == '|' && cara == '&'))
 	{
@@ -117,7 +117,7 @@ void	meta_cara(char **buffer, char cara, t_token **mini_vars, t_state *state)
 		lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars, state);
 		free(*buffer);
 		*buffer = NULL;
-		*buffer = add_char(*buffer, cara);
+		*buffer = add_char(*buffer, cara, state);
 	}
 	else if (*buffer && *buffer[0] == cara)
 	{
@@ -135,7 +135,7 @@ void	meta_cara(char **buffer, char cara, t_token **mini_vars, t_state *state)
 		*buffer = NULL;
 	}
 	else
-		*buffer = add_char(*buffer, cara);
+		*buffer = add_char(*buffer, cara, state);
 	close_token(mini_vars);
 }
 
@@ -168,5 +168,5 @@ void	other_cara(char **buffer, char cara, t_token **mini_vars, t_state *state)
 	current = find_last(mini_vars);
 	if (current->token_state == 0)
 		lstadd_back(addnode(WORD), mini_vars, state);
-	*buffer = add_char(*buffer, cara);
+	*buffer = add_char(*buffer, cara, state);
 }

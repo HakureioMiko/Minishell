@@ -97,6 +97,8 @@ t_token	*lexing(t_token **mini_vars, char *line)
 	if (state == 1 || state == 2)
 	{
 		ft_miniclear(mini_vars);
+		if(buffer)
+			free(buffer);
 		printf("minishell: unclosed quote\n");
 		return (NULL);
 	}

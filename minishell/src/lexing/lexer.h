@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:14:19 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/17 18:28:16 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/27 11:41:56 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	    lstadd_sub_back(t_sub_token *new, t_token **lst, t_state *state);
 t_token				*lexing(t_token **mini_vars, char *line);
 
 // LEXING_2
-char	*add_char(char *buffer, char new);
+char	*add_char(char *buffer, char new, t_state *state);
 void	in_d_quote_state(char **buf, char c, t_state *st, t_token **mini);
 void	in_s_quote_state(char **buf, char c, t_state *st, t_token **mini);
 void	close_token(t_token **mini_vars);

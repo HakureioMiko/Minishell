@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/26 15:42:20 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/27 11:02:44 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,11 @@
 # include <string.h>
 # include <unistd.h>
 // getcwd() chdir() isatty() ttyname() ttyslot()
+
+typedef struct s_exec
+{
+	int	exit_code;
+}		        t_exec;
 
 //EXECUTION
 int	execution(t_ast *ast, t_env *env);
